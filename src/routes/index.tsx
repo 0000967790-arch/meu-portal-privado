@@ -94,46 +94,60 @@ function Index() {
 
       {/* Clube de benefícios */}
       <section className="bg-secondary/50 py-20">
-        <div className="container mx-auto grid gap-12 px-4 md:grid-cols-2 md:items-center">
-          <div>
-            <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-              <Wallet className="mr-1.5 h-3.5 w-3.5" /> Exclusivo para associados
-            </span>
-            <h2 className="mt-4 text-3xl font-bold md:text-4xl">Clube de Benefícios Top Truck</h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Mais vantagens, economia e praticidade. Através de parcerias exclusivas, os membros têm acesso a descontos e promoções em diversos segmentos.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Descontos em combustível",
-                "Promoções em manutenção automotiva",
-                "Parcerias exclusivas em diversos segmentos",
-                "Acesso simples com CPF e placa do veículo",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8">
-              <Link to="/login">
-                <Button size="lg">
-                  Entrar no Clube <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+        <div className="container mx-auto px-4">
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            <div>
+              <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+                <Wallet className="mr-1.5 h-3.5 w-3.5" /> Exclusivo para associados
+              </span>
+              <h2 className="mt-4 text-3xl font-bold md:text-4xl">Clube de benefícios</h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                O Clube de Benefícios da Top Truck foi criado para oferecer ainda mais vantagens, economia e praticidade aos associados. Através de parcerias exclusivas, os membros têm acesso a descontos, promoções e benefícios especiais em diversos segmentos, como combustível, manutenção automotiva e muito mais.
+              </p>
+              <div className="mt-8">
+                <Link to="/login">
+                  <Button size="lg">
+                    Entrar no Clube <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-card p-8 shadow-[var(--shadow-elegant)]">
+              <div className="rounded-xl p-6 text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>
+                <p className="text-sm opacity-80">Cartão do Associado</p>
+                <p className="mt-2 font-display text-2xl font-bold">Top Truck Club</p>
+                <p className="mt-8 text-xs uppercase tracking-widest opacity-70">Membro</p>
+                <p className="font-mono text-lg">•••• •••• •••• 2026</p>
+              </div>
+              <p className="mt-6 text-sm text-muted-foreground">
+                O acesso é restrito a associados. Use seu CPF e a placa do seu veículo cadastrada para entrar.
+              </p>
             </div>
           </div>
-          <div className="rounded-2xl border bg-card p-8 shadow-[var(--shadow-elegant)]">
-            <div className="rounded-xl p-6 text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>
-              <p className="text-sm opacity-80">Cartão do Associado</p>
-              <p className="mt-2 font-display text-2xl font-bold">Top Truck Club</p>
-              <p className="mt-8 text-xs uppercase tracking-widest opacity-70">Membro</p>
-              <p className="font-mono text-lg">•••• •••• •••• 2026</p>
+
+          {/* Parceiros */}
+          <div className="mt-16">
+            <h3 className="text-center text-2xl font-bold md:text-3xl">Nossos parceiros</h3>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                { icon: Store, name: "Armazém Multimarcas", desc: "Descontos exclusivos em autopeças e acessórios multimarcas.", tag: "Peças" },
+                { icon: CircleDot, name: "Grid Pneus", desc: "Condições especiais na compra de pneus e serviços de rodagem.", tag: "Pneus" },
+                { icon: DoorOpen, name: "Fraga Autoportas", desc: "Benefícios em serviços de autoportas e reparos automotivos.", tag: "Reparos" },
+                { icon: Droplets, name: "Fraga Lava Rápido", desc: "Preços reduzidos em lavagem e higienização do veículo.", tag: "Estética" },
+                { icon: Sparkles, name: "GM Estética Automotiva", desc: "Vantagens em polimento, vitrificação e cuidados com a pintura.", tag: "Estética" },
+              ].map(({ icon: Icon, name, desc, tag }) => (
+                <div key={name} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
+                    <Icon className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                    {tag}
+                  </span>
+                  <h4 className="mt-5 text-lg font-semibold">{name}</h4>
+                  <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+                </div>
+              ))}
             </div>
-            <p className="mt-6 text-sm text-muted-foreground">
-              O acesso é restrito a associados. Use seu CPF e a placa do seu veículo cadastrada para entrar.
-            </p>
           </div>
         </div>
       </section>
