@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
+import { PhotoMarquee } from "@/components/PhotoMarquee";
 import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, CheckCircle2 } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
 
@@ -56,6 +57,8 @@ function Index() {
           </div>
         </div>
       </section>
+
+      <PhotoMarquee />
 
       {/* Sobre */}
       <section id="sobre" className="container mx-auto px-4 py-20">
