@@ -90,7 +90,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <Toaster />
+      <ClientOnly fallback={null}><Toaster /></ClientOnly>
     </QueryClientProvider>
   );
 }
