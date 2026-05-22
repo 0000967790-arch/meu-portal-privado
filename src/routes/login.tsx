@@ -125,6 +125,35 @@ function LoginPage() {
             </Button>
           </form>
 
+          <div className="mt-6 border-t pt-6">
+            <p className="text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Ainda não é associado?
+            </p>
+            <div className="mt-4 rounded-xl border border-accent/20 bg-accent/5 p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10">
+                  <Phone className="h-4 w-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Quer proteger seu veículo?</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Solicite uma cotação gratuita e conheça os planos da Top Truck.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
+              >
+                <Phone className="h-4 w-4" />
+                Solicitar cotação no WhatsApp
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+
           <p className="mt-6 text-center text-xs text-muted-foreground">
             Ao entrar, você concorda com os termos de uso da Top Truck.
           </p>
