@@ -83,7 +83,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen items-center justify-center px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
+    <div className="flex min-h-screen items-center justify-center px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
       <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-md flex-col justify-center">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2 text-primary-foreground">
           <Shield className="h-6 w-6 text-accent" />
