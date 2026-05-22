@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Fuel, Wrench, ShoppingBag, Hotel, Pizza, Stethoscope } from "lucide-react";
+import { Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
   head: () => ({
@@ -12,12 +12,11 @@ export const Route = createFileRoute("/_authenticated/beneficios")({
 });
 
 const partners = [
-  { icon: Fuel, name: "Postos parceiros", desc: "Até 8% de desconto em combustível", tag: "Combustível" },
-  { icon: Wrench, name: "Oficinas credenciadas", desc: "15% off em manutenção e revisões", tag: "Automotivo" },
-  { icon: ShoppingBag, name: "Autopeças", desc: "Condições especiais em peças e acessórios", tag: "Peças" },
-  { icon: Hotel, name: "Hospedagem na estrada", desc: "Tarifas reduzidas em pousadas e hotéis", tag: "Viagem" },
-  { icon: Pizza, name: "Restaurantes", desc: "Cardápios com preço de associado", tag: "Alimentação" },
-  { icon: Stethoscope, name: "Saúde & Bem-estar", desc: "Consultas e exames com desconto", tag: "Saúde" },
+  { icon: Store, name: "Armazém Multimarcas", desc: "Descontos exclusivos em autopeças e acessórios multimarcas.", tag: "Peças" },
+  { icon: CircleDot, name: "Grid Pneus", desc: "Condições especiais na compra de pneus e serviços de rodagem.", tag: "Pneus" },
+  { icon: DoorOpen, name: "Fraga Autoportas", desc: "Benefícios em serviços de autoportas e reparos automotivos.", tag: "Reparos" },
+  { icon: Droplets, name: "Fraga Lava Rápido", desc: "Preços reduzidos em lavagem e higienização do veículo.", tag: "Estética" },
+  { icon: Sparkles, name: "GM Estética Automotiva", desc: "Vantagens em polimento, vitrificação e cuidados com a pintura.", tag: "Estética" },
 ];
 
 function Beneficios() {
@@ -45,9 +44,9 @@ function Beneficios() {
       </section>
 
       <section className="container mx-auto px-4 py-14">
-        <h2 className="text-2xl font-bold">Vantagens exclusivas</h2>
+        <h2 className="text-2xl font-bold">Nossos parceiros</h2>
         <p className="mt-2 text-muted-foreground">
-          Aproveite descontos e condições especiais em parceiros selecionados.
+          Aproveite descontos e condições exclusivas nos parceiros do Clube de Benefícios Top Truck.
         </p>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
