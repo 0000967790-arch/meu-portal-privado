@@ -44,9 +44,9 @@ function Beneficios() {
       </section>
 
       <section className="container mx-auto px-4 py-14">
-        <h2 className="text-2xl font-bold">Vantagens exclusivas</h2>
+        <h2 className="text-2xl font-bold">Nossos parceiros</h2>
         <p className="mt-2 text-muted-foreground">
-          Aproveite descontos e condições especiais em parceiros selecionados.
+          Aproveite descontos e condições exclusivas nos parceiros do Clube de Benefícios Top Truck.
         </p>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
