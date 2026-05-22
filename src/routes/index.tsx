@@ -95,33 +95,20 @@ function Index() {
       {/* Clube de benefícios */}
       <section className="bg-secondary/50 py-20">
         <div className="container mx-auto px-4">
-          <div className="grid gap-12 md:grid-cols-2 md:items-center">
-            <div>
-              <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-                <Wallet className="mr-1.5 h-3.5 w-3.5" /> Exclusivo para associados
-              </span>
-              <h2 className="mt-4 text-3xl font-bold md:text-4xl">Clube de benefícios</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                O Clube de Benefícios da Top Truck foi criado para oferecer ainda mais vantagens, economia e praticidade aos associados. Através de parcerias exclusivas, os membros têm acesso a descontos, promoções e benefícios especiais em diversos segmentos, como combustível, manutenção automotiva e muito mais.
-              </p>
-              <div className="mt-8">
-                <Link to="/login">
-                  <Button size="lg">
-                    Entrar no Clube <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="rounded-2xl border bg-card p-8 shadow-[var(--shadow-elegant)]">
-              <div className="rounded-xl p-6 text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>
-                <p className="text-sm opacity-80">Cartão do Associado</p>
-                <p className="mt-2 font-display text-2xl font-bold">Top Truck Club</p>
-                <p className="mt-8 text-xs uppercase tracking-widest opacity-70">Membro</p>
-                <p className="font-mono text-lg">•••• •••• •••• 2026</p>
-              </div>
-              <p className="mt-6 text-sm text-muted-foreground">
-                O acesso é restrito a associados. Use seu CPF e a placa do seu veículo cadastrada para entrar.
-              </p>
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+              <Wallet className="mr-1.5 h-3.5 w-3.5" /> Exclusivo para associados
+            </span>
+            <h2 className="mt-4 text-3xl font-bold md:text-4xl">Clube de benefícios</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              O Clube de Benefícios da Top Truck foi criado para oferecer ainda mais vantagens, economia e praticidade aos associados. Através de parcerias exclusivas, os membros têm acesso a descontos, promoções e benefícios especiais em diversos segmentos, como combustível, manutenção automotiva e muito mais.
+            </p>
+            <div className="mt-8">
+              <Link to="/login">
+                <Button size="lg">
+                  Entrar no Clube <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </div>
 
