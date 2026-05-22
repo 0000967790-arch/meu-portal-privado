@@ -65,7 +65,13 @@ function Index() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold md:text-4xl">Quem somos</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            A Top Truck é uma associação de proteção veicular comprometida em oferecer segurança, tranquilidade e suporte para quem valoriza seu veículo e sua família — com responsabilidade, transparência e atendimento humanizado.
+            Bem-vindo à Top Truck Clube de Benefícios! Aqui você tem proteção, segurança e benefícios que só a Top Truck proporciona.
+          </p>
+          <p className="mt-4 text-lg text-muted-foreground">
+            A Top Truck é uma associação de proteção veicular comprometida em oferecer segurança, tranquilidade e suporte para quem valoriza seu veículo e sua família. Atuando com responsabilidade, transparência e atendimento humanizado, a empresa busca garantir proteção completa para seus associados, sempre com soluções acessíveis e eficientes.
+          </p>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Mais do que proteger veículos, a Top Truck trabalha para criar uma relação de confiança com cada associado, oferecendo benefícios, assistência e acompanhamento de qualidade em todos os momentos. Com uma equipe humanizada, preparada e com foco na excelência, a associação se destaca pelo compromisso em atender com agilidade e proximidade, proporcionando mais segurança no dia a dia de seus clientes.
           </p>
         </div>
 
