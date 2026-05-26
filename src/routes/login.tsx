@@ -29,6 +29,7 @@ const cpfToEmail = (cpf: string) => `${cpf}@associado.toptruck.app`;
 
 function LoginPage() {
   const navigate = useNavigate();
+  const checkAssociate = useServerFn(checkAssociateByEmail);
   const [cpf, setCpf] = useState("");
   const [placa, setPlaca] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,11 +55,29 @@ function LoginPage() {
     const email = cpfToEmail(cleanCpf);
     const password = cleanPlaca;
 
+    // Block anyone who is not a registered associate
+    try {
+      const check = await checkAssociate({ data: { email } });
+      if (!check.exists) {
+        toast.error("CPF não cadastrado no Clube. Solicite sua cotação pelo WhatsApp.");
+        setLoading(false);
+        return;
+      }
+      if (!check.active) {
+        toast.error("Sua associação está inativa. Entre em contato com a Top Truck.");
+        setLoading(false);
+        return;
+      }
+    } catch {
+      toast.error("Não foi possível validar seu cadastro. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
     // Try sign in first
     const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInErr) {
-      // If invalid credentials, attempt signup (first-time associate)
       if (signInErr.message.toLowerCase().includes("invalid")) {
         const { error: signUpErr } = await supabase.auth.signUp({
           email,
@@ -83,6 +102,7 @@ function LoginPage() {
     toast.success("Login realizado!");
     navigate({ to: "/beneficios" });
   };
+
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
