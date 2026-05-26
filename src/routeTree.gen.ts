@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedBeneficiosRouteImport } from './routes/_authenticated/beneficios'
+import { Route as AuthenticatedAdminAssociadosRouteImport } from './routes/_authenticated/admin.associados'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -33,16 +34,24 @@ const AuthenticatedBeneficiosRoute = AuthenticatedBeneficiosRouteImport.update({
   path: '/beneficios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminAssociadosRoute =
+  AuthenticatedAdminAssociadosRouteImport.update({
+    id: '/admin/associados',
+    path: '/admin/associados',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/beneficios': typeof AuthenticatedBeneficiosRoute
+  '/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/beneficios': typeof AuthenticatedBeneficiosRoute
+  '/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,18 +59,20 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/beneficios': typeof AuthenticatedBeneficiosRoute
+  '/_authenticated/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/beneficios'
+  fullPaths: '/' | '/login' | '/beneficios' | '/admin/associados'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/beneficios'
+  to: '/' | '/login' | '/beneficios' | '/admin/associados'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/beneficios'
+    | '/_authenticated/admin/associados'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,15 +111,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBeneficiosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/associados': {
+      id: '/_authenticated/admin/associados'
+      path: '/admin/associados'
+      fullPath: '/admin/associados'
+      preLoaderRoute: typeof AuthenticatedAdminAssociadosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedBeneficiosRoute: typeof AuthenticatedBeneficiosRoute
+  AuthenticatedAdminAssociadosRoute: typeof AuthenticatedAdminAssociadosRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBeneficiosRoute: AuthenticatedBeneficiosRoute,
+  AuthenticatedAdminAssociadosRoute: AuthenticatedAdminAssociadosRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -123,13 +143,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

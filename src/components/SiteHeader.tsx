@@ -1,20 +1,30 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { getIsAdmin } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
 import { Shield, LogOut } from "lucide-react";
 
 export function SiteHeader() {
   const [isAuthed, setIsAuthed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const checkAdmin = useServerFn(getIsAdmin);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      setIsAuthed(!!session);
-    });
-    supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
+    const apply = (authed: boolean) => {
+      setIsAuthed(authed);
+      if (authed) {
+        checkAdmin().then((r) => setIsAdmin(r.isAdmin)).catch(() => setIsAdmin(false));
+      } else {
+        setIsAdmin(false);
+      }
+    };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => apply(!!session));
+    supabase.auth.getSession().then(({ data }) => apply(!!data.session));
     return () => subscription.unsubscribe();
-  }, []);
+  }, [checkAdmin]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -34,6 +44,11 @@ export function SiteHeader() {
           </Link>
           {isAuthed ? (
             <>
+              {isAdmin && (
+                <Link to="/admin/associados">
+                  <Button variant="outline" size="sm">Admin</Button>
+                </Link>
+              )}
               <Link to="/beneficios">
                 <Button variant="secondary" size="sm">Clube de Benefícios</Button>
               </Link>
