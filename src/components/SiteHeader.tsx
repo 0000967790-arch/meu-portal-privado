@@ -4,7 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getIsAdmin } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
-import { Shield, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import logo from "@/assets/toptruck-logo.png";
 
 export function SiteHeader() {
   const [isAuthed, setIsAuthed] = useState(false);
