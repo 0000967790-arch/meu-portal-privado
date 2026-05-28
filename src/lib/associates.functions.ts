@@ -21,12 +21,11 @@ export const checkAssociateByEmail = createServerFn({ method: "POST" })
 export const getMyAssociate = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { supabase, claims } = context;
-    const email = (claims as { email?: string }).email ?? "";
+    const { supabase, userId } = context;
     const { data } = await supabase
       .from("associates")
       .select("id, full_name, email, phone, card_number, active, created_at")
-      .or(`user_id.eq.${context.userId},email.ilike.${email}`)
+      .eq("user_id", userId)
       .maybeSingle();
     return { associate: data ?? null };
   });
