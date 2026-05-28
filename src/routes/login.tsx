@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Loader2, Phone, ArrowRight } from "lucide-react";
+import { Loader2, Phone, ArrowRight } from "lucide-react";
+import logo from "@/assets/toptruck-logo.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -107,9 +108,8 @@ function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
       <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-md flex-col justify-center">
-        <Link to="/" className="mb-8 flex items-center justify-center gap-2 text-primary-foreground">
-          <Shield className="h-6 w-6 text-accent" />
-          <span className="font-display text-xl font-bold">Top Truck</span>
+        <Link to="/" className="mb-8 flex items-center justify-center" aria-label="Top Truck — Início">
+          <img src={logo} alt="Top Truck Clube de Benefícios" className="h-16 w-auto rounded-lg bg-white/95 px-4 py-2 shadow-lg" />
         </Link>
 
         <div className="rounded-2xl border bg-card p-8 shadow-[var(--shadow-elegant)]">
