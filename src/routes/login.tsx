@@ -106,8 +106,14 @@ function LoginPage() {
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
-      <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-md flex-col justify-center">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12" style={{ background: "var(--gradient-hero)" }}>
+      <img
+        src={logo}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 w-[min(120vw,900px)] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.07] blur-[1px] select-none"
+      />
+      <div className="relative mx-auto flex min-h-[calc(100vh-6rem)] max-w-md flex-col justify-center">
         <Link to="/" className="mb-8 flex items-center justify-center" aria-label="Top Truck — Início">
           <img src={logo} alt="Top Truck Clube de Benefícios" className="h-16 w-auto rounded-lg bg-white/95 px-4 py-2 shadow-lg" />
         </Link>
