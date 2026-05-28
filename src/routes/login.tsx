@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Loader2, Phone, ArrowRight } from "lucide-react";
+import { Loader2, Phone, ArrowRight } from "lucide-react";
+import logo from "@/assets/toptruck-logo.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
