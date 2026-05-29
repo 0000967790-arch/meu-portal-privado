@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Loader2, Phone, ArrowRight } from "lucide-react";
+import { Shield, Loader2, Phone, ArrowRight, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -33,6 +33,7 @@ function LoginPage() {
   const [cpf, setCpf] = useState("");
   const [placa, setPlaca] = useState("");
   const [loading, setLoading] = useState(false);
+  const [notAssociate, setNotAssociate] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -51,6 +52,7 @@ function LoginPage() {
       return;
     }
 
+    setNotAssociate(false);
     setLoading(true);
     const email = cpfToEmail(cleanCpf);
     const password = cleanPlaca;
@@ -59,7 +61,7 @@ function LoginPage() {
     try {
       const check = await checkAssociate({ data: { email } });
       if (!check.exists) {
-        toast.error("CPF não cadastrado no Clube. Solicite sua cotação pelo WhatsApp.");
+        setNotAssociate(true);
         setLoading(false);
         return;
       }
@@ -118,6 +120,27 @@ function LoginPage() {
             Entre com seu CPF e a placa do seu veículo cadastrada. Se for seu primeiro acesso, sua conta será criada automaticamente.
           </p>
 
+          {/* Banner: CPF não cadastrado */}
+          {notAssociate && (
+            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
+              <p className="text-sm font-semibold text-red-700">CPF não encontrado como associado</p>
+              <p className="mt-1 text-sm text-red-600">
+                Seu CPF ainda não está cadastrado no Clube de Benefícios Top Truck.
+                Para se tornar nosso associado, entre em contato conosco pelo WhatsApp:
+              </p>
+              <a
+                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20me%20tornar%20associado%20do%20Clube%20de%20Benef%C3%ADcios%20Top%20Truck."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white shadow transition hover:bg-[#1ebd5a] active:scale-95"
+              >
+                <MessageCircle className="h-4 w-4" />
+                (31) 99692-5587 — Falar no WhatsApp
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          )}
+
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="cpf">CPF</Label>
@@ -164,7 +187,7 @@ function LoginPage() {
                 </div>
               </div>
               <a
-                href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
