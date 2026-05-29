@@ -116,6 +116,7 @@ function Beneficios() {
   const [loading, setLoading] = useState(true);
   const [associate, setAssociate] = useState<Associate | null>(null);
   const [selected, setSelected] = useState<Partner | null>(null);
+  const [cardOpen, setCardOpen] = useState(false);
 
   useEffect(() => {
     fetchMine()
