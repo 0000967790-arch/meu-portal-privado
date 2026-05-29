@@ -129,13 +129,13 @@ function LoginPage() {
                 Para se tornar nosso associado, entre em contato conosco pelo WhatsApp:
               </p>
               <a
-                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20me%20tornar%20associado%20do%20Clube%20de%20Benef%C3%ADcios%20Top%20Truck."
+                href="https://wa.me/5531996935587?text=Ol%C3%A1%21%20Gostaria%20de%20me%20tornar%20associado%20do%20Clube%20de%20Benef%C3%ADcios%20Top%20Truck."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white shadow transition hover:bg-[#1ebd5a] active:scale-95"
               >
                 <MessageCircle className="h-4 w-4" />
-                (31) 99692-5587 — Falar no WhatsApp
+                (31) 99693-5587 — Falar no WhatsApp
                 <ArrowRight className="h-3.5 w-3.5" />
               </a>
             </div>
@@ -187,7 +187,7 @@ function LoginPage() {
                 </div>
               </div>
               <a
-                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+                href="https://wa.me/5531996935587?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"

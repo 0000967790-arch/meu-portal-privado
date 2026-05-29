@@ -35,7 +35,7 @@ function Index() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+                href="https://wa.me/5531996935587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -153,7 +153,7 @@ function Index() {
             Fale agora com nossa equipe pelo WhatsApp e receba uma cotação gratuita e personalizada para o seu veículo.
           </p>
           <a
-            href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+            href="https://wa.me/5531996935587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-[#25D366] px-8 py-4 text-lg font-bold text-white shadow-[var(--shadow-glow)] transition hover:bg-[#1ebd5a] active:scale-95"
@@ -162,7 +162,7 @@ function Index() {
             Realizar Cotação Gratuita
             <ArrowRight className="h-5 w-5" />
           </a>
-          <p className="mt-4 text-sm text-white/60">(31) 99692-5587 · Atendimento via WhatsApp</p>
+          <p className="mt-4 text-sm text-white/60">(31) 99693-5587 · Atendimento via WhatsApp</p>
         </div>
       </section>
 
