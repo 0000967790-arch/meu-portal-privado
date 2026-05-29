@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAssociate } from "@/lib/associates.functions";
+import { useScreenshotProtection } from "@/hooks/use-screenshot-protection";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone } from "lucide-react";
 
@@ -33,6 +34,8 @@ function Beneficios() {
   const [loading, setLoading] = useState(true);
   const [associate, setAssociate] = useState<Associate | null>(null);
 
+  useScreenshotProtection();
+
   useEffect(() => {
     fetchMine()
       .then((res) => setAssociate(res.associate as Associate | null))
@@ -62,7 +65,7 @@ function Beneficios() {
                 : "Solicite uma cotação no WhatsApp para ter acesso ao Clube de Benefícios."}
             </p>
             <a
-              href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20da%20Top%20Truck."
+              href="https://wa.me/5531996935587?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20da%20Top%20Truck."
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
