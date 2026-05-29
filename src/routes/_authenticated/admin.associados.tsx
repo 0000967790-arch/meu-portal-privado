@@ -45,6 +45,7 @@ function AdminAssociados() {
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
+  const [placa, setPlaca] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const refresh = useCallback(async () => {
@@ -75,8 +76,13 @@ function AdminAssociados() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCpf = cpf.replace(/\D/g, "");
+    const cleanPlaca = placa.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
     if (cleanCpf.length !== 11) {
       toast.error("CPF deve ter 11 dígitos");
+      return;
+    }
+    if (cleanPlaca.length !== 7) {
+      toast.error("Placa deve ter 7 caracteres (letras e números)");
       return;
     }
     if (name.trim().length < 2) {
@@ -85,9 +91,9 @@ function AdminAssociados() {
     }
     setSubmitting(true);
     try {
-      await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim() } });
+      await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim(), placa: cleanPlaca } });
       toast.success("Associado cadastrado!");
-      setName(""); setCpf(""); setPhone("");
+      setName(""); setCpf(""); setPhone(""); setPlaca("");
       refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao cadastrar");
@@ -149,6 +155,17 @@ function AdminAssociados() {
             />
           </div>
           <div>
+            <Label htmlFor="placa">Placa do veículo (senha)</Label>
+            <Input
+              id="placa"
+              placeholder="Ex: ABC1D23"
+              value={placa}
+              onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7))}
+              maxLength={7}
+              required
+            />
+          </div>
+          <div className="sm:col-span-2">
             <Label htmlFor="phone">Telefone</Label>
             <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} />
           </div>
