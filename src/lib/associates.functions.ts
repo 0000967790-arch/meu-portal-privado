@@ -24,7 +24,7 @@ export const getMyAssociate = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
     const { data } = await supabase
       .from("associates")
-      .select("id, full_name, email, phone, card_number, active, created_at")
+      .select("id, full_name, email, phone, cpf, placa, card_number, active, created_at")
       .eq("user_id", userId)
       .maybeSingle();
     return { associate: data ?? null };
