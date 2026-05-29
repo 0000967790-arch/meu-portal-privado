@@ -155,6 +155,21 @@ function AdminAssociados() {
             />
           </div>
           <div>
+            <Label htmlFor="placa">Placa do veículo (senha)</Label>
+            <Input
+              id="placa"
+              placeholder="Ex: ABC1D23"
+              value={placa}
+              onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7))}
+              maxLength={7}
+              required
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <Label htmlFor="phone">Telefone</Label>
+            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} />
+          </div>
+          <div>
             <Label htmlFor="phone">Telefone</Label>
             <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} />
           </div>
