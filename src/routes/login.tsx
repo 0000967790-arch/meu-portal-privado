@@ -77,32 +77,16 @@ function LoginPage() {
       return;
     }
 
-    // Try sign in first
+    // Realiza o login com CPF (email) e placa (senha)
     const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInErr) {
-      if (signInErr.message.toLowerCase().includes("invalid")) {
-        const { error: signUpErr } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/beneficios` },
-        });
-        if (signUpErr) {
-          toast.error(signUpErr.message);
-          setLoading(false);
-          return;
-        }
-        toast.success("Cadastro realizado! Bem-vindo ao Clube.");
-        navigate({ to: "/beneficios" });
-        setLoading(false);
-        return;
-      }
-      toast.error(signInErr.message);
+      toast.error("Placa incorreta. Verifique a placa do veículo cadastrado.");
       setLoading(false);
       return;
     }
 
-    toast.success("Login realizado!");
+    toast.success("Login realizado! Bem-vindo ao Clube.");
     navigate({ to: "/beneficios" });
   };
 

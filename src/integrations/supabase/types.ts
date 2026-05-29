@@ -19,10 +19,12 @@ export type Database = {
           active: boolean
           card_number: string
           created_at: string
+          cpf: string | null
           email: string
           full_name: string
           id: string
           phone: string | null
+          placa: string | null
           updated_at: string
           user_id: string | null
         }
@@ -30,10 +32,12 @@ export type Database = {
           active?: boolean
           card_number?: string
           created_at?: string
+          cpf?: string | null
           email: string
           full_name: string
           id?: string
           phone?: string | null
+          placa?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -41,10 +45,12 @@ export type Database = {
           active?: boolean
           card_number?: string
           created_at?: string
+          cpf?: string | null
           email?: string
           full_name?: string
           id?: string
           phone?: string | null
+          placa?: string | null
           updated_at?: string
           user_id?: string | null
         }

@@ -124,7 +124,7 @@ export function ImportAssociates({ onImportDone }: ImportAssociatesProps) {
       }
       try {
         await createFn({
-          data: { full_name: r.full_name, cpf: r.cpf, phone: r.phone },
+          data: { full_name: r.full_name, cpf: r.cpf, phone: r.phone, placa: r.placa },
         });
         updatedRows[i] = { ...r, importStatus: "success" };
         successCount++;
@@ -220,6 +220,7 @@ export function ImportAssociates({ onImportDone }: ImportAssociatesProps) {
                     Colunas esperadas:{" "}
                     <code className="rounded bg-muted px-1">Nome</code>{" "}
                     <code className="rounded bg-muted px-1">CPF</code>{" "}
+                    <code className="rounded bg-muted px-1">Placa</code>{" "}
                     <code className="rounded bg-muted px-1">Telefone</code>
                   </p>
                 </>
@@ -238,8 +239,8 @@ export function ImportAssociates({ onImportDone }: ImportAssociatesProps) {
           {status === "idle" && (
             <p className="text-xs text-muted-foreground">
               💡 Dica: sua planilha deve ter uma linha de cabeçalho com as colunas{" "}
-              <strong>Nome</strong>, <strong>CPF</strong> e{" "}
-              <strong>Telefone</strong> (o nome das colunas pode variar).
+              <strong>Nome</strong>, <strong>CPF</strong>, <strong>Placa</strong> e{" "}
+              <strong>Telefone</strong>. A placa será a senha de login do associado.
             </p>
           )}
 
@@ -324,6 +325,7 @@ export function ImportAssociates({ onImportDone }: ImportAssociatesProps) {
                       <th className="px-3 py-2 text-left font-medium">Nome</th>
                       <th className="px-3 py-2 text-left font-medium">CPF</th>
                       <th className="px-3 py-2 text-left font-medium">Telefone</th>
+                      <th className="px-3 py-2 text-left font-medium">Placa</th>
                       <th className="px-3 py-2 text-left font-medium">Status</th>
                     </tr>
                   </thead>
@@ -358,6 +360,7 @@ export function ImportAssociates({ onImportDone }: ImportAssociatesProps) {
                             : "—"}
                         </td>
                         <td className="px-3 py-2">{r.phone || "—"}</td>
+                        <td className="px-3 py-2 font-mono">{r.placa || "—"}</td>
                         <td className="px-3 py-2">
                           {r.importStatus === "success" ? (
                             <span className="flex items-center gap-1 text-green-700">

@@ -6,12 +6,14 @@
  *   nome / name / full_name / nome completo
  *   cpf
  *   telefone / phone / celular / tel
+ *   placa / placa do veiculo / vehicle plate
  */
 
 export type ParsedAssociate = {
   full_name: string;
   cpf: string;
   phone: string;
+  placa: string;
   /** linha de origem para feedback visual */
   rowIndex: number;
   /** erros encontrados neste registro */
@@ -28,9 +30,10 @@ function normalizeHeader(h: string): string {
     .replace(/[^a-z0-9]/g, "");     // remove não-alfanuméricos
 }
 
-const NAME_KEYS = ["nome", "nomecompleto", "fullname", "name", "associado"];
-const CPF_KEYS  = ["cpf", "documentocpf", "numerocpf"];
+const NAME_KEYS  = ["nome", "nomecompleto", "fullname", "name", "associado"];
+const CPF_KEYS   = ["cpf", "documentocpf", "numerocpf"];
 const PHONE_KEYS = ["telefone", "celular", "phone", "cel", "tel", "fone"];
+const PLACA_KEYS = ["placa", "placaveiculo", "placadoveiculo", "vehicleplate", "plate"];
 
 function matchKey(normalized: string, candidates: string[]): boolean {
   return candidates.some((c) => normalized.includes(c));
@@ -44,9 +47,14 @@ function cleanPhone(raw: string): string {
   return String(raw ?? "").replace(/[^\d+() -]/g, "").trim();
 }
 
+function cleanPlaca(raw: string): string {
+  return String(raw ?? "").replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 7);
+}
+
 function validateAssociate(a: ParsedAssociate): void {
   if (a.full_name.trim().length < 2) a.errors.push("Nome inválido");
   if (a.cpf.length !== 11)           a.errors.push("CPF inválido (deve ter 11 dígitos)");
+  if (a.placa.length !== 7)          a.errors.push("Placa inválida (deve ter 7 caracteres)");
 }
 
 // ─── Excel (.xlsx / .xls / .csv) ──────────────────────────────────────────────
@@ -70,6 +78,7 @@ export async function parseExcelFile(file: File): Promise<ParsedAssociate[]> {
   const nameIdx  = normHeaders.findIndex((h) => matchKey(h, NAME_KEYS));
   const cpfIdx   = normHeaders.findIndex((h) => matchKey(h, CPF_KEYS));
   const phoneIdx = normHeaders.findIndex((h) => matchKey(h, PHONE_KEYS));
+  const placaIdx = normHeaders.findIndex((h) => matchKey(h, PLACA_KEYS));
 
   const results: ParsedAssociate[] = [];
 
@@ -82,6 +91,7 @@ export async function parseExcelFile(file: File): Promise<ParsedAssociate[]> {
       full_name : nameIdx  >= 0 ? String(row[nameIdx]  ?? "").trim() : "",
       cpf       : cpfIdx   >= 0 ? cleanCpf(String(row[cpfIdx] ?? ""))  : "",
       phone     : phoneIdx >= 0 ? cleanPhone(String(row[phoneIdx] ?? "")) : "",
+      placa     : placaIdx >= 0 ? cleanPlaca(String(row[placaIdx] ?? "")) : "",
       rowIndex  : i + 1,  // 1-based para exibição
       errors    : [],
     };
@@ -144,6 +154,7 @@ function extractFromHtmlTable(html: string): ParsedAssociate[] {
   const nameIdx  = normHeaders.findIndex((h) => matchKey(h, NAME_KEYS));
   const cpfIdx   = normHeaders.findIndex((h) => matchKey(h, CPF_KEYS));
   const phoneIdx = normHeaders.findIndex((h) => matchKey(h, PHONE_KEYS));
+  const placaIdx = normHeaders.findIndex((h) => matchKey(h, PLACA_KEYS));
 
   if (nameIdx < 0 && cpfIdx < 0) return [];
 
@@ -152,6 +163,7 @@ function extractFromHtmlTable(html: string): ParsedAssociate[] {
       full_name : nameIdx  >= 0 ? (cells[nameIdx]  ?? "").trim() : "",
       cpf       : cpfIdx   >= 0 ? cleanCpf(cells[cpfIdx] ?? "")  : "",
       phone     : phoneIdx >= 0 ? cleanPhone(cells[phoneIdx] ?? "") : "",
+      placa     : placaIdx >= 0 ? cleanPlaca(cells[placaIdx] ?? "") : "",
       rowIndex  : i + 2,
       errors    : [],
     };
