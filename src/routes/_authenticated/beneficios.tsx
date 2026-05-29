@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone, MapPin, Clock, CheckCircle2, ExternalLink } from "lucide-react";
+import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone, MapPin, Clock, CheckCircle2, ExternalLink, X } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
   head: () => ({
