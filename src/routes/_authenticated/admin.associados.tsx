@@ -9,6 +9,7 @@ import {
   getIsAdmin,
 } from "@/lib/associates.functions";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ImportAssociates } from "@/components/ImportAssociates";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,7 +134,19 @@ function AdminAssociados() {
           Cadastre, ative ou remova associados do Clube de Benefícios.
         </p>
 
-        <form onSubmit={onCreate} className="mt-8 grid gap-4 rounded-2xl border bg-card p-6 sm:grid-cols-4">
+        {/* ── Importação em lote ── */}
+        <div className="mt-8">
+          <ImportAssociates onImportDone={refresh} />
+        </div>
+
+        {/* ── Cadastro manual ── */}
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold">Cadastro manual</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Preencha os campos abaixo para cadastrar um associado individualmente.
+          </p>
+        </div>
+        <form onSubmit={onCreate} className="mt-3 grid gap-4 rounded-2xl border bg-card p-6 sm:grid-cols-4">
           <div className="sm:col-span-2">
             <Label htmlFor="name">Nome completo</Label>
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} required />
