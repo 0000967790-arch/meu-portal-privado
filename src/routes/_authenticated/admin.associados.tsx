@@ -169,10 +169,6 @@ function AdminAssociados() {
             <Label htmlFor="phone">Telefone</Label>
             <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} />
           </div>
-          <div>
-            <Label htmlFor="phone">Telefone</Label>
-            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} />
-          </div>
           <div className="sm:col-span-4">
             <Button type="submit" disabled={submitting}>
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Plus className="mr-2 h-4 w-4" /> Cadastrar associado</>}
