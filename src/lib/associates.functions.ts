@@ -101,6 +101,8 @@ export const createAssociate = createServerFn({ method: "POST" })
         full_name: data.full_name,
         email,
         phone: data.phone || null,
+        cpf: data.cpf,
+        placa: data.placa,
         user_id: created?.user?.id ?? null,
       })
       .select()
