@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PhotoMarquee } from "@/components/PhotoMarquee";
-import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, CheckCircle2, Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
+import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, CheckCircle2, Store, CircleDot, DoorOpen, Droplets, Sparkles, MessageCircle } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
 
 export const Route = createFileRoute("/")({
@@ -34,16 +34,21 @@ function Index() {
               Na Top Truck, segurança, transparência e atendimento humanizado caminham juntos. E agora, com o nosso Clube de Benefícios, você economiza ainda mais.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" className="bg-[#25D366] text-white hover:bg-[#1ebd5a] shadow-[var(--shadow-glow)] font-bold">
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Realizar Cotação
+                </Button>
+              </a>
               <Link to="/login">
-                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-[var(--shadow-glow)]">
+                <Button size="lg" variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">
                   Acessar Clube de Benefícios <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <a href="#sobre">
-                <Button size="lg" variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">
-                  Saiba mais
-                </Button>
-              </a>
             </div>
           </div>
           <div className="relative">
@@ -136,6 +141,28 @@ function Index() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Cotação */}
+      <section style={{ background: "var(--gradient-hero)" }} className="py-20">
+        <div className="container mx-auto px-4 text-center text-primary-foreground">
+          <MessageCircle className="mx-auto h-12 w-12 text-[#25D366]" />
+          <h2 className="mt-4 text-3xl font-bold md:text-4xl">Pronto para proteger seu veículo?</h2>
+          <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto">
+            Fale agora com nossa equipe pelo WhatsApp e receba uma cotação gratuita e personalizada para o seu veículo.
+          </p>
+          <a
+            href="https://wa.me/5531996925587?text=Ol%C3%A1%21%20Gostaria%20de%20realizar%20uma%20cota%C3%A7%C3%A3o%20de%20prote%C3%A7%C3%A3o%20veicular%20da%20Top%20Truck."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-[#25D366] px-8 py-4 text-lg font-bold text-white shadow-[var(--shadow-glow)] transition hover:bg-[#1ebd5a] active:scale-95"
+          >
+            <MessageCircle className="h-6 w-6" />
+            Realizar Cotação Gratuita
+            <ArrowRight className="h-5 w-5" />
+          </a>
+          <p className="mt-4 text-sm text-white/60">(31) 99692-5587 · Atendimento via WhatsApp</p>
         </div>
       </section>
 
