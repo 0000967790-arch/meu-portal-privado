@@ -5,6 +5,7 @@ import { getMyAssociate } from "@/lib/associates.functions";
 import { useScreenshotProtection } from "@/hooks/use-screenshot-protection";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
   head: () => ({
@@ -96,20 +97,29 @@ function Beneficios() {
       <section className="container mx-auto px-4 py-10">
         <div className="mx-auto max-w-xl">
           <div
-            className="rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)]"
+            className="relative overflow-hidden rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)]"
             style={{ background: "var(--gradient-primary)" }}
           >
-            <div className="flex items-start justify-between">
+            {/* Marca d'água */}
+            <img
+              src={logo}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 m-auto h-40 w-auto select-none opacity-10"
+              style={{ filter: "grayscale(1) brightness(10)" }}
+            />
+
+            <div className="relative flex items-start justify-between">
               <div>
                 <p className="text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
-                <p className="mt-1 font-display text-2xl font-bold">Top Truck Club</p>
+                <img src={logo} alt="Top Truck" className="mt-2 h-7 w-auto brightness-0 invert" />
               </div>
               <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
                 Ativo
               </span>
             </div>
-            <p className="mt-8 font-mono text-xl tracking-widest">{associate.card_number}</p>
-            <div className="mt-6 flex items-end justify-between text-xs uppercase tracking-widest opacity-80">
+            <p className="relative mt-8 font-mono text-xl tracking-widest">{associate.card_number}</p>
+            <div className="relative mt-6 flex items-end justify-between text-xs uppercase tracking-widest opacity-80">
               <div>
                 <p className="opacity-70">Membro</p>
                 <p className="mt-1 font-semibold normal-case tracking-normal">{associate.full_name}</p>

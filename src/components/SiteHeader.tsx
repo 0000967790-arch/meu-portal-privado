@@ -4,7 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getIsAdmin } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
-import { Shield, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export function SiteHeader() {
   const [isAuthed, setIsAuthed] = useState(false);
@@ -34,9 +35,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
-          <Shield className="h-6 w-6 text-accent" />
-          <span>Top Truck</span>
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="Top Truck Clube de Benefícios" className="h-10 w-auto" />
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
           <Link to="/" className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:inline">

@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PhotoMarquee } from "@/components/PhotoMarquee";
-import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, CheckCircle2, Store, CircleDot, DoorOpen, Droplets, Sparkles, MessageCircle } from "lucide-react";
+import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, Store, CircleDot, DoorOpen, Droplets, Sparkles, MessageCircle } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,6 +23,14 @@ function Index() {
 
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
+        {/* Marca d'água Hero */}
+        <img
+          src={logo}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-[480px] max-w-[50%] select-none opacity-[0.04]"
+          style={{ filter: "grayscale(1) brightness(10)" }}
+        />
         <div className="container mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:items-center md:py-28">
           <div className="text-primary-foreground">
             <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
