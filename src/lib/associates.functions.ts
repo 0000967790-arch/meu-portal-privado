@@ -67,6 +67,7 @@ const createSchema = z.object({
   full_name: z.string().trim().min(2).max(120),
   cpf: z.string().regex(/^\d{11}$/, "CPF deve ter 11 dígitos"),
   phone: z.string().trim().max(20).optional().or(z.literal("")),
+  placa: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{7}$/, "Placa deve ter 7 caracteres"),
 });
 
 export const createAssociate = createServerFn({ method: "POST" })
@@ -82,12 +83,25 @@ export const createAssociate = createServerFn({ method: "POST" })
     if (!roleRow) throw new Error("Acesso negado");
 
     const email = cpfToEmail(data.cpf);
+
+    // Pre-create the auth user with placa as password so the associate
+    // can log in imediatamente com o CPF e a placa cadastrada pelo admin.
+    const { data: created, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password: data.placa,
+      email_confirm: true,
+    });
+    if (authError && !/already|registered|exists/i.test(authError.message)) {
+      throw new Error(authError.message);
+    }
+
     const { data: inserted, error } = await supabaseAdmin
       .from("associates")
       .insert({
         full_name: data.full_name,
         email,
         phone: data.phone || null,
+        user_id: created?.user?.id ?? null,
       })
       .select()
       .single();
