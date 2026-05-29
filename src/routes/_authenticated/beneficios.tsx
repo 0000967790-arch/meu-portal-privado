@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone, MapPin, Clock, CheckCircle2, ExternalLink } from "lucide-react";
+import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone, MapPin, Clock, CheckCircle2, ExternalLink, X } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
   head: () => ({
@@ -92,9 +92,23 @@ const partners: Partner[] = [
 type Associate = {
   full_name: string;
   email: string;
+  cpf: string | null;
+  placa: string | null;
   card_number: string;
   active: boolean;
   created_at: string;
+};
+
+const formatCpf = (cpf: string | null) => {
+  if (!cpf) return "—";
+  const d = cpf.replace(/\D/g, "").padStart(11, "0");
+  return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9, 11)}`;
+};
+
+const formatPlaca = (p: string | null) => {
+  if (!p) return "—";
+  const v = p.toUpperCase();
+  return v.length === 7 ? `${v.slice(0, 3)}-${v.slice(3)}` : v;
 };
 
 function Beneficios() {
@@ -102,6 +116,7 @@ function Beneficios() {
   const [loading, setLoading] = useState(true);
   const [associate, setAssociate] = useState<Associate | null>(null);
   const [selected, setSelected] = useState<Partner | null>(null);
+  const [cardOpen, setCardOpen] = useState(false);
 
   useEffect(() => {
     fetchMine()
@@ -162,8 +177,11 @@ function Beneficios() {
 
       <section className="container mx-auto px-4 py-10">
         <div className="mx-auto max-w-xl">
-          <div
-            className="rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)]"
+          <button
+            type="button"
+            onClick={() => setCardOpen(true)}
+            aria-label="Expandir cartão do associado"
+            className="block w-full text-left rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)] transition-all hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             style={{ background: "var(--gradient-primary)" }}
           >
             <div className="flex items-start justify-between">
@@ -176,19 +194,92 @@ function Beneficios() {
               </span>
             </div>
             <p className="mt-8 font-mono text-xl tracking-widest">{associate.card_number}</p>
-            <div className="mt-6 flex items-end justify-between text-xs uppercase tracking-widest opacity-80">
-              <div>
-                <p className="opacity-70">Membro</p>
+            <div className="mt-6 grid grid-cols-2 gap-4 text-xs uppercase tracking-widest opacity-90">
+              <div className="col-span-2">
+                <p className="opacity-70">Nome</p>
                 <p className="mt-1 font-semibold normal-case tracking-normal">{associate.full_name}</p>
               </div>
-              <div className="text-right">
-                <p className="opacity-70">Desde</p>
-                <p className="mt-1 font-semibold">{memberSince}</p>
+              <div>
+                <p className="opacity-70">CPF</p>
+                <p className="mt-1 font-mono font-semibold normal-case tracking-wider">{formatCpf(associate.cpf)}</p>
+              </div>
+              <div>
+                <p className="opacity-70">Placa</p>
+                <p className="mt-1 font-mono font-semibold tracking-widest">{formatPlaca(associate.placa)}</p>
+              </div>
+              <div className="col-span-2 mt-1 text-[10px] opacity-60">
+                Toque para expandir
+              </div>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {cardOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setCardOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm animate-in fade-in"
+        >
+          <button
+            type="button"
+            onClick={() => setCardOpen(false)}
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            aria-label="Fechar"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-[90vw] sm:max-w-[760px] aspect-[1.586/1] rounded-3xl p-6 sm:p-10 text-primary-foreground shadow-2xl"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            <div className="flex h-full flex-col justify-between">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-[10px] sm:text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
+                  <p className="mt-1 font-display text-2xl sm:text-4xl font-bold">Top Truck Club</p>
+                </div>
+                <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider backdrop-blur">
+                  Ativo
+                </span>
+              </div>
+
+              <p className="font-mono text-xl sm:text-3xl md:text-4xl tracking-widest">
+                {associate.card_number}
+              </p>
+
+              <div className="grid grid-cols-3 gap-3 sm:gap-6 text-[10px] sm:text-xs uppercase tracking-widest opacity-90">
+                <div className="col-span-3 sm:col-span-1">
+                  <p className="opacity-70">Nome</p>
+                  <p className="mt-1 text-sm sm:text-base font-semibold normal-case tracking-normal">
+                    {associate.full_name}
+                  </p>
+                </div>
+                <div>
+                  <p className="opacity-70">CPF</p>
+                  <p className="mt-1 font-mono text-sm sm:text-base font-semibold normal-case tracking-wider">
+                    {formatCpf(associate.cpf)}
+                  </p>
+                </div>
+                <div>
+                  <p className="opacity-70">Placa</p>
+                  <p className="mt-1 font-mono text-sm sm:text-base font-semibold tracking-widest">
+                    {formatPlaca(associate.placa)}
+                  </p>
+                </div>
+                <div className="col-span-3 sm:col-span-1 sm:text-right">
+                  <p className="opacity-70">Desde</p>
+                  <p className="mt-1 font-semibold">{memberSince}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      )}
+
+
 
       <section className="container mx-auto px-4 pb-14">
         <h2 className="text-2xl font-bold">Nossos parceiros</h2>

@@ -18,33 +18,39 @@ export type Database = {
         Row: {
           active: boolean
           card_number: string
+          cpf: string | null
           created_at: string
           email: string
           full_name: string
           id: string
           phone: string | null
+          placa: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           active?: boolean
           card_number?: string
+          cpf?: string | null
           created_at?: string
           email: string
           full_name: string
           id?: string
           phone?: string | null
+          placa?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           active?: boolean
           card_number?: string
+          cpf?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id?: string
           phone?: string | null
+          placa?: string | null
           updated_at?: string
           user_id?: string | null
         }

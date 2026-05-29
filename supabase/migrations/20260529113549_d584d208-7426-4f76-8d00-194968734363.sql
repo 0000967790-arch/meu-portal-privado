@@ -1,0 +1,1 @@
+ALTER TABLE public.associates ADD COLUMN IF NOT EXISTS cpf text, ADD COLUMN IF NOT EXISTS placa text;
