@@ -1,22 +1,22 @@
-import img1 from "@/assets/carousel-1.jpg";
-import img2 from "@/assets/carousel-2.jpg";
-import img3 from "@/assets/carousel-3.jpg";
-import img4 from "@/assets/carousel-4.jpg";
-import img5 from "@/assets/carousel-5.jpg";
+import img1 from "@/assets/carousel-1.png";
+import img2 from "@/assets/carousel-2.png";
+import img3 from "@/assets/carousel-3.png";
+import img4 from "@/assets/carousel-4.png";
+import img5 from "@/assets/carousel-5.png";
 
 const images = [
-  { src: img1, alt: "Caminhão na estrada ao entardecer" },
-  { src: img2, alt: "Mecânico realizando manutenção" },
-  { src: img3, alt: "Guincho prestando assistência 24h" },
-  { src: img4, alt: "Família protegida ao lado do carro" },
-  { src: img5, alt: "Frota de caminhões em pátio seguro" },
+  { src: img1, alt: "Top Truck - Proteção Veicular" },
+  { src: img2, alt: "Top Truck - Clube de Benefícios" },
+  { src: img3, alt: "Top Truck - Assistência 24h" },
+  { src: img4, alt: "Top Truck - Parceiros Exclusivos" },
+  { src: img5, alt: "Top Truck - Atendimento Humanizado" },
 ];
 
 export function PhotoMarquee() {
   const loop = [...images, ...images];
   return (
     <section
-      aria-label="Galeria de proteção veicular"
+      aria-label="Galeria Top Truck"
       className="border-y bg-secondary/30 py-10"
     >
       <div
