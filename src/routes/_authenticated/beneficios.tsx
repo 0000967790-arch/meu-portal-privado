@@ -92,9 +92,23 @@ const partners: Partner[] = [
 type Associate = {
   full_name: string;
   email: string;
+  cpf: string | null;
+  placa: string | null;
   card_number: string;
   active: boolean;
   created_at: string;
+};
+
+const formatCpf = (cpf: string | null) => {
+  if (!cpf) return "—";
+  const d = cpf.replace(/\D/g, "").padStart(11, "0");
+  return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9, 11)}`;
+};
+
+const formatPlaca = (p: string | null) => {
+  if (!p) return "—";
+  const v = p.toUpperCase();
+  return v.length === 7 ? `${v.slice(0, 3)}-${v.slice(3)}` : v;
 };
 
 function Beneficios() {
