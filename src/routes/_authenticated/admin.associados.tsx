@@ -181,6 +181,38 @@ function AdminAssociados() {
       toast.error("Erro ao excluir");
     }
   };
+  const onImportFile = async (file: File) => {
+    setImporting(true);
+    setImportProgress(null);
+    try {
+      const rows = await parseFile(file);
+      if (rows.length === 0) {
+        toast.error("Nenhum registro válido encontrado. Verifique colunas: nome, cpf, telefone, placa.");
+        return;
+      }
+      let ok = 0, fail = 0;
+      setImportProgress({ done: 0, total: rows.length });
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        try {
+          await createFn({ data: { full_name: r.full_name, cpf: r.cpf, phone: r.phone, placa: r.placa } });
+          ok++;
+        } catch {
+          fail++;
+        }
+        setImportProgress({ done: i + 1, total: rows.length });
+      }
+      toast.success(`Importação concluída: ${ok} criados${fail ? `, ${fail} com erro` : ""}.`);
+      refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao importar");
+    } finally {
+      setImporting(false);
+      setImportProgress(null);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
 
   if (authorized !== true) {
     return (
