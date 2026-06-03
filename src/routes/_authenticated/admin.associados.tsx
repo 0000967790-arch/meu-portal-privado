@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listAssociates,
@@ -13,7 +13,64 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck } from "lucide-react";
+import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet } from "lucide-react";
+import * as XLSX from "xlsx";
+import mammoth from "mammoth";
+
+type ParsedRow = { full_name: string; cpf: string; phone: string; placa: string };
+
+const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+function pickKey(row: Record<string, unknown>, candidates: string[]): string {
+  for (const key of Object.keys(row)) {
+    const k = norm(key);
+    if (candidates.some((c) => k.includes(c))) {
+      const v = row[key];
+      if (v != null) return String(v);
+    }
+  }
+  return "";
+}
+
+function rowsFromRecords(records: Record<string, unknown>[]): ParsedRow[] {
+  return records
+    .map((r) => {
+      const full_name = pickKey(r, ["nome", "name"]).trim();
+      const cpf = pickKey(r, ["cpf"]).replace(/\D/g, "");
+      const phone = pickKey(r, ["telefone", "phone", "celular", "fone"]).trim();
+      const placa = pickKey(r, ["placa", "plate"]).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return { full_name, cpf, phone, placa };
+    })
+    .filter((r) => r.full_name && r.cpf.length === 11 && r.placa.length === 7);
+}
+
+async function parseFile(file: File): Promise<ParsedRow[]> {
+  const name = file.name.toLowerCase();
+  const buf = await file.arrayBuffer();
+
+  if (name.endsWith(".xlsx") || name.endsWith(".xls") || name.endsWith(".csv")) {
+    const wb = XLSX.read(buf, { type: "array" });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+    return rowsFromRecords(json);
+  }
+
+  if (name.endsWith(".docx")) {
+    const { value: text } = await mammoth.extractRawText({ arrayBuffer: buf });
+    // Try to parse as table-like rows: name | cpf | phone | placa per line
+    const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    const records: Record<string, unknown>[] = [];
+    for (const line of lines) {
+      const parts = line.split(/\s*[|;,\t]\s*/);
+      if (parts.length >= 3) {
+        records.push({ nome: parts[0], cpf: parts[1], telefone: parts[2] ?? "", placa: parts[3] ?? parts[2] });
+      }
+    }
+    return rowsFromRecords(records);
+  }
+
+  throw new Error("Formato não suportado. Use .xlsx, .xls, .csv ou .docx");
+}
 
 export const Route = createFileRoute("/_authenticated/admin/associados")({
   head: () => ({ meta: [{ title: "Admin — Associados" }] }),
@@ -47,6 +104,9 @@ function AdminAssociados() {
   const [phone, setPhone] = useState("");
   const [placa, setPlaca] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState<{ done: number; total: number } | null>(null);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -121,6 +181,38 @@ function AdminAssociados() {
       toast.error("Erro ao excluir");
     }
   };
+  const onImportFile = async (file: File) => {
+    setImporting(true);
+    setImportProgress(null);
+    try {
+      const rows = await parseFile(file);
+      if (rows.length === 0) {
+        toast.error("Nenhum registro válido encontrado. Verifique colunas: nome, cpf, telefone, placa.");
+        return;
+      }
+      let ok = 0, fail = 0;
+      setImportProgress({ done: 0, total: rows.length });
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        try {
+          await createFn({ data: { full_name: r.full_name, cpf: r.cpf, phone: r.phone, placa: r.placa } });
+          ok++;
+        } catch {
+          fail++;
+        }
+        setImportProgress({ done: i + 1, total: rows.length });
+      }
+      toast.success(`Importação concluída: ${ok} criados${fail ? `, ${fail} com erro` : ""}.`);
+      refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao importar");
+    } finally {
+      setImporting(false);
+      setImportProgress(null);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
 
   if (authorized !== true) {
     return (
@@ -139,8 +231,41 @@ function AdminAssociados() {
           Cadastre, ative ou remova associados do Clube de Benefícios.
         </p>
 
+        <div className="mt-8 rounded-2xl border bg-card p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h2 className="flex items-center gap-2 text-lg font-semibold">
+                <FileSpreadsheet className="h-5 w-5" /> Importar associados em lote
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Envie uma planilha (.xlsx, .xls, .csv) ou um documento Word (.docx). Colunas/campos
+                esperados: <strong>nome</strong>, <strong>cpf</strong>, <strong>telefone</strong>, <strong>placa</strong>.
+              </p>
+              {importProgress && (
+                <p className="mt-2 text-sm">Processando {importProgress.done}/{importProgress.total}…</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".xlsx,.xls,.csv,.docx"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) onImportFile(f);
+                }}
+              />
+              <Button type="button" onClick={() => fileRef.current?.click()} disabled={importing}>
+                {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Upload className="mr-2 h-4 w-4" /> Selecionar arquivo</>}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={onCreate} className="mt-8 grid gap-4 rounded-2xl border bg-card p-6 sm:grid-cols-4">
           <div className="sm:col-span-2">
+
             <Label htmlFor="name">Nome completo</Label>
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} required />
           </div>
