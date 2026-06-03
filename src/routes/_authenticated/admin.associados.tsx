@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listAssociates,
@@ -13,7 +13,64 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck } from "lucide-react";
+import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet } from "lucide-react";
+import * as XLSX from "xlsx";
+import mammoth from "mammoth";
+
+type ParsedRow = { full_name: string; cpf: string; phone: string; placa: string };
+
+const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+function pickKey(row: Record<string, unknown>, candidates: string[]): string {
+  for (const key of Object.keys(row)) {
+    const k = norm(key);
+    if (candidates.some((c) => k.includes(c))) {
+      const v = row[key];
+      if (v != null) return String(v);
+    }
+  }
+  return "";
+}
+
+function rowsFromRecords(records: Record<string, unknown>[]): ParsedRow[] {
+  return records
+    .map((r) => {
+      const full_name = pickKey(r, ["nome", "name"]).trim();
+      const cpf = pickKey(r, ["cpf"]).replace(/\D/g, "");
+      const phone = pickKey(r, ["telefone", "phone", "celular", "fone"]).trim();
+      const placa = pickKey(r, ["placa", "plate"]).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return { full_name, cpf, phone, placa };
+    })
+    .filter((r) => r.full_name && r.cpf.length === 11 && r.placa.length === 7);
+}
+
+async function parseFile(file: File): Promise<ParsedRow[]> {
+  const name = file.name.toLowerCase();
+  const buf = await file.arrayBuffer();
+
+  if (name.endsWith(".xlsx") || name.endsWith(".xls") || name.endsWith(".csv")) {
+    const wb = XLSX.read(buf, { type: "array" });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+    return rowsFromRecords(json);
+  }
+
+  if (name.endsWith(".docx")) {
+    const { value: text } = await mammoth.extractRawText({ arrayBuffer: buf });
+    // Try to parse as table-like rows: name | cpf | phone | placa per line
+    const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    const records: Record<string, unknown>[] = [];
+    for (const line of lines) {
+      const parts = line.split(/\s*[|;,\t]\s*/);
+      if (parts.length >= 3) {
+        records.push({ nome: parts[0], cpf: parts[1], telefone: parts[2] ?? "", placa: parts[3] ?? parts[2] });
+      }
+    }
+    return rowsFromRecords(records);
+  }
+
+  throw new Error("Formato não suportado. Use .xlsx, .xls, .csv ou .docx");
+}
 
 export const Route = createFileRoute("/_authenticated/admin/associados")({
   head: () => ({ meta: [{ title: "Admin — Associados" }] }),
