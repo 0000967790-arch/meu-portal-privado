@@ -104,6 +104,9 @@ function AdminAssociados() {
   const [phone, setPhone] = useState("");
   const [placa, setPlaca] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState<{ done: number; total: number } | null>(null);
 
   const refresh = useCallback(async () => {
     setLoading(true);
