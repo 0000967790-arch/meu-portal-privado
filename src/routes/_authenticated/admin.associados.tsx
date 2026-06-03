@@ -231,8 +231,41 @@ function AdminAssociados() {
           Cadastre, ative ou remova associados do Clube de Benefícios.
         </p>
 
+        <div className="mt-8 rounded-2xl border bg-card p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h2 className="flex items-center gap-2 text-lg font-semibold">
+                <FileSpreadsheet className="h-5 w-5" /> Importar associados em lote
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Envie uma planilha (.xlsx, .xls, .csv) ou um documento Word (.docx). Colunas/campos
+                esperados: <strong>nome</strong>, <strong>cpf</strong>, <strong>telefone</strong>, <strong>placa</strong>.
+              </p>
+              {importProgress && (
+                <p className="mt-2 text-sm">Processando {importProgress.done}/{importProgress.total}…</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".xlsx,.xls,.csv,.docx"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) onImportFile(f);
+                }}
+              />
+              <Button type="button" onClick={() => fileRef.current?.click()} disabled={importing}>
+                {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Upload className="mr-2 h-4 w-4" /> Selecionar arquivo</>}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={onCreate} className="mt-8 grid gap-4 rounded-2xl border bg-card p-6 sm:grid-cols-4">
           <div className="sm:col-span-2">
+
             <Label htmlFor="name">Nome completo</Label>
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} required />
           </div>
