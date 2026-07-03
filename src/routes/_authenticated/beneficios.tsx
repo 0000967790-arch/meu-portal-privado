@@ -316,8 +316,8 @@ function Beneficios() {
         </p>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {partners.map((p) => {
-            const Icon = p.icon;
+          {activePartners.map((p) => {
+            const Icon = p.icon ?? Store;
             return (
               <button
                 key={p.name}
@@ -326,8 +326,12 @@ function Beneficios() {
                 className="group text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "var(--gradient-primary)" }}>
-                    <Icon className="h-6 w-6 text-primary-foreground" />
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
+                    {p.logo_url ? (
+                      <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <Icon className="h-6 w-6 text-primary-foreground" />
+                    )}
                   </div>
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
