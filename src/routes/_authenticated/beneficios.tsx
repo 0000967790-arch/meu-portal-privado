@@ -350,8 +350,15 @@ function Beneficios() {
             <>
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "var(--gradient-primary)" }}>
-                    <selected.icon className="h-6 w-6 text-primary-foreground" />
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
+                    {selected.logo_url ? (
+                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" />
+                    ) : (
+                      (() => {
+                        const Icon = selected.icon ?? Store;
+                        return <Icon className="h-6 w-6 text-primary-foreground" />;
+                      })()
+                    )}
                   </div>
                   <div>
                     <DialogTitle>{selected.name}</DialogTitle>
