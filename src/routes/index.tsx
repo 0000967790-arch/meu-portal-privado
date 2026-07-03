@@ -1,9 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PhotoMarquee } from "@/components/PhotoMarquee";
-import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, CheckCircle2, Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
+import { listPartners } from "@/lib/partners.functions";
+import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
+
+type DbPartner = {
+  id: string;
+  name: string;
+  category: string | null;
+  description: string | null;
+  logo_url: string | null;
+};
+
+const fallbackPartners = [
+  { icon: Store, name: "Armazém Multimarcas", desc: "Descontos exclusivos em autopeças e acessórios multimarcas.", tag: "Peças" },
+  { icon: CircleDot, name: "Grid Pneus", desc: "Condições especiais na compra de pneus e serviços de rodagem.", tag: "Pneus" },
+  { icon: DoorOpen, name: "Fraga Autoportas", desc: "Benefícios em serviços de autoportas e reparos automotivos.", tag: "Reparos" },
+  { icon: Droplets, name: "Fraga Lava Rápido", desc: "Preços reduzidos em lavagem e higienização do veículo.", tag: "Estética" },
+  { icon: Sparkles, name: "GM Estética Automotiva", desc: "Vantagens em polimento, vitrificação e cuidados com a pintura.", tag: "Estética" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,6 +35,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const fetchPartners = useServerFn(listPartners);
+  const [dbPartners, setDbPartners] = useState<DbPartner[]>([]);
+
+  useEffect(() => {
+    fetchPartners().then((res) => setDbPartners(res.partners as DbPartner[])).catch(() => {});
+  }, [fetchPartners]);
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -116,24 +142,37 @@ function Index() {
           <div className="mt-16">
             <h3 className="text-center text-2xl font-bold md:text-3xl">Nossos parceiros</h3>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              {[
-                { icon: Store, name: "Armazém Multimarcas", desc: "Descontos exclusivos em autopeças e acessórios multimarcas.", tag: "Peças" },
-                { icon: CircleDot, name: "Grid Pneus", desc: "Condições especiais na compra de pneus e serviços de rodagem.", tag: "Pneus" },
-                { icon: DoorOpen, name: "Fraga Autoportas", desc: "Benefícios em serviços de autoportas e reparos automotivos.", tag: "Reparos" },
-                { icon: Droplets, name: "Fraga Lava Rápido", desc: "Preços reduzidos em lavagem e higienização do veículo.", tag: "Estética" },
-                { icon: Sparkles, name: "GM Estética Automotiva", desc: "Vantagens em polimento, vitrificação e cuidados com a pintura.", tag: "Estética" },
-              ].map(({ icon: Icon, name, desc, tag }) => (
-                <div key={name} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
-                    <Icon className="h-7 w-7 text-primary-foreground" />
-                  </div>
-                  <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
-                    {tag}
-                  </span>
-                  <h4 className="mt-5 text-lg font-semibold">{name}</h4>
-                  <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
-                </div>
-              ))}
+              {dbPartners.length > 0
+                ? dbPartners.map((p) => (
+                    <div key={p.id} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-full" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
+                        {p.logo_url ? (
+                          <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <Store className="h-7 w-7 text-primary-foreground" />
+                        )}
+                      </div>
+                      {p.category && (
+                        <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                          {p.category}
+                        </span>
+                      )}
+                      <h4 className="mt-5 text-lg font-semibold">{p.name}</h4>
+                      {p.description && <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>}
+                    </div>
+                  ))
+                : fallbackPartners.map(({ icon: Icon, name, desc, tag }) => (
+                    <div key={name} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
+                        <Icon className="h-7 w-7 text-primary-foreground" />
+                      </div>
+                      <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                        {tag}
+                      </span>
+                      <h4 className="mt-5 text-lg font-semibold">{name}</h4>
+                      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>

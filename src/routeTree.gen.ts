@@ -13,7 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedBeneficiosRouteImport } from './routes/_authenticated/beneficios'
-import { Route as AuthenticatedAdminAssociadosRouteImport } from './routes/_authenticated/admin.associados'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -34,45 +34,44 @@ const AuthenticatedBeneficiosRoute = AuthenticatedBeneficiosRouteImport.update({
   path: '/beneficios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedAdminAssociadosRoute =
-  AuthenticatedAdminAssociadosRouteImport.update({
-    id: '/admin/associados',
-    path: '/admin/associados',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/beneficios': typeof AuthenticatedBeneficiosRoute
-  '/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/beneficios': typeof AuthenticatedBeneficiosRoute
-  '/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/beneficios': typeof AuthenticatedBeneficiosRoute
-  '/_authenticated/admin/associados': typeof AuthenticatedAdminAssociadosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/beneficios' | '/admin/associados'
+  fullPaths: '/' | '/login' | '/admin' | '/beneficios'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/beneficios' | '/admin/associados'
+  to: '/' | '/login' | '/admin' | '/beneficios'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/admin'
     | '/_authenticated/beneficios'
-    | '/_authenticated/admin/associados'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,24 +110,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBeneficiosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/associados': {
-      id: '/_authenticated/admin/associados'
-      path: '/admin/associados'
-      fullPath: '/admin/associados'
-      preLoaderRoute: typeof AuthenticatedAdminAssociadosRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedBeneficiosRoute: typeof AuthenticatedBeneficiosRoute
-  AuthenticatedAdminAssociadosRoute: typeof AuthenticatedAdminAssociadosRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedBeneficiosRoute: AuthenticatedBeneficiosRoute,
-  AuthenticatedAdminAssociadosRoute: AuthenticatedAdminAssociadosRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

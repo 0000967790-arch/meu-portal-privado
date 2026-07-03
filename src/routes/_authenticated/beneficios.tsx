@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAssociate } from "@/lib/associates.functions";
+import { listPartners } from "@/lib/partners.functions";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   Dialog,
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/_authenticated/beneficios")({
 });
 
 type Partner = {
-  icon: typeof Store;
+  icon?: typeof Store;
+  logo_url?: string | null;
   name: string;
   desc: string;
   tag: string;
@@ -29,6 +31,7 @@ type Partner = {
   phone: string;
   hours: string;
   benefit: string;
+  website?: string | null;
 };
 
 const partners: Partner[] = [
@@ -113,16 +116,41 @@ const formatPlaca = (p: string | null) => {
 
 function Beneficios() {
   const fetchMine = useServerFn(getMyAssociate);
+  const fetchPartners = useServerFn(listPartners);
   const [loading, setLoading] = useState(true);
   const [associate, setAssociate] = useState<Associate | null>(null);
   const [selected, setSelected] = useState<Partner | null>(null);
   const [cardOpen, setCardOpen] = useState(false);
+  const [dbPartners, setDbPartners] = useState<Partner[] | null>(null);
 
   useEffect(() => {
     fetchMine()
       .then((res) => setAssociate(res.associate as Associate | null))
       .finally(() => setLoading(false));
-  }, [fetchMine]);
+    fetchPartners()
+      .then((res) => {
+        if (res.partners.length > 0) {
+          setDbPartners(
+            res.partners.map((p: any) => ({
+              logo_url: p.logo_url,
+              name: p.name,
+              desc: p.description ?? "",
+              tag: p.category ?? "Parceiro",
+              services: p.services ?? [],
+              address: p.address ?? "",
+              phone: p.phone ?? "",
+              hours: p.hours ?? "",
+              benefit: p.benefit ?? p.discount ?? "",
+              website: p.website ?? null,
+            })),
+          );
+        }
+      })
+      .catch(() => {});
+  }, [fetchMine, fetchPartners]);
+
+  const activePartners: Partner[] = dbPartners && dbPartners.length > 0 ? dbPartners : partners;
+
 
   if (loading) {
     return (
@@ -288,8 +316,8 @@ function Beneficios() {
         </p>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {partners.map((p) => {
-            const Icon = p.icon;
+          {activePartners.map((p) => {
+            const Icon = p.icon ?? Store;
             return (
               <button
                 key={p.name}
@@ -298,8 +326,12 @@ function Beneficios() {
                 className="group text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "var(--gradient-primary)" }}>
-                    <Icon className="h-6 w-6 text-primary-foreground" />
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
+                    {p.logo_url ? (
+                      <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <Icon className="h-6 w-6 text-primary-foreground" />
+                    )}
                   </div>
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
@@ -318,8 +350,15 @@ function Beneficios() {
             <>
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "var(--gradient-primary)" }}>
-                    <selected.icon className="h-6 w-6 text-primary-foreground" />
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
+                    {selected.logo_url ? (
+                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" />
+                    ) : (
+                      (() => {
+                        const Icon = selected.icon ?? Store;
+                        return <Icon className="h-6 w-6 text-primary-foreground" />;
+                      })()
+                    )}
                   </div>
                   <div>
                     <DialogTitle>{selected.name}</DialogTitle>

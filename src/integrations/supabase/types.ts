@@ -56,6 +56,93 @@ export type Database = {
         }
         Relationships: []
       }
+      carousel_images: {
+        Row: {
+          active: boolean
+          alt_text: string
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          alt_text?: string
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          alt_text?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partners: {
+        Row: {
+          active: boolean
+          address: string | null
+          benefit: string | null
+          category: string | null
+          created_at: string
+          description: string | null
+          discount: string | null
+          hours: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          phone: string | null
+          services: string[]
+          sort_order: number
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          active?: boolean
+          address?: string | null
+          benefit?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          discount?: string | null
+          hours?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          services?: string[]
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          active?: boolean
+          address?: string | null
+          benefit?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          discount?: string | null
+          hours?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          services?: string[]
+          sort_order?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

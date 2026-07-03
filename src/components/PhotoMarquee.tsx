@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { listCarouselImages } from "@/lib/carousel.functions";
 import img1 from "@/assets/carousel-1.png";
 import img2 from "@/assets/carousel-2.png";
 import img3 from "@/assets/carousel-3.png";
 import img4 from "@/assets/carousel-4.png";
 import img5 from "@/assets/carousel-5.png";
 
-const images = [
+const fallbackImages = [
   { src: img1, alt: "Caminhão na estrada ao entardecer" },
   { src: img2, alt: "Mecânico realizando manutenção" },
   { src: img3, alt: "Guincho prestando assistência 24h" },
@@ -13,6 +16,19 @@ const images = [
 ];
 
 export function PhotoMarquee() {
+  const fetchImages = useServerFn(listCarouselImages);
+  const [images, setImages] = useState<{ src: string; alt: string }[]>(fallbackImages);
+
+  useEffect(() => {
+    fetchImages()
+      .then((res) => {
+        if (res.images.length > 0) {
+          setImages(res.images.map((i) => ({ src: i.image_url, alt: i.alt_text || "Foto Top Truck" })));
+        }
+      })
+      .catch(() => {/* keep fallback */});
+  }, [fetchImages]);
+
   const loop = [...images, ...images];
   return (
     <section
