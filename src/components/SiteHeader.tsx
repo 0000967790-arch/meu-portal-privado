@@ -45,7 +45,7 @@ export function SiteHeader() {
           {isAuthed ? (
             <>
               {isAdmin && (
-                <Link to="/admin/associados">
+                <Link to="/admin">
                   <Button variant="outline" size="sm">Admin</Button>
                 </Link>
               )}

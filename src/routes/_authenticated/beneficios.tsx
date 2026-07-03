@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAssociate } from "@/lib/associates.functions";
+import { listPartners } from "@/lib/partners.functions";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   Dialog,
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/_authenticated/beneficios")({
 });
 
 type Partner = {
-  icon: typeof Store;
+  icon?: typeof Store;
+  logo_url?: string | null;
   name: string;
   desc: string;
   tag: string;
@@ -29,6 +31,7 @@ type Partner = {
   phone: string;
   hours: string;
   benefit: string;
+  website?: string | null;
 };
 
 const partners: Partner[] = [
@@ -113,16 +116,41 @@ const formatPlaca = (p: string | null) => {
 
 function Beneficios() {
   const fetchMine = useServerFn(getMyAssociate);
+  const fetchPartners = useServerFn(listPartners);
   const [loading, setLoading] = useState(true);
   const [associate, setAssociate] = useState<Associate | null>(null);
   const [selected, setSelected] = useState<Partner | null>(null);
   const [cardOpen, setCardOpen] = useState(false);
+  const [dbPartners, setDbPartners] = useState<Partner[] | null>(null);
 
   useEffect(() => {
     fetchMine()
       .then((res) => setAssociate(res.associate as Associate | null))
       .finally(() => setLoading(false));
-  }, [fetchMine]);
+    fetchPartners()
+      .then((res) => {
+        if (res.partners.length > 0) {
+          setDbPartners(
+            res.partners.map((p: any) => ({
+              logo_url: p.logo_url,
+              name: p.name,
+              desc: p.description ?? "",
+              tag: p.category ?? "Parceiro",
+              services: p.services ?? [],
+              address: p.address ?? "",
+              phone: p.phone ?? "",
+              hours: p.hours ?? "",
+              benefit: p.benefit ?? p.discount ?? "",
+              website: p.website ?? null,
+            })),
+          );
+        }
+      })
+      .catch(() => {});
+  }, [fetchMine, fetchPartners]);
+
+  const activePartners: Partner[] = dbPartners && dbPartners.length > 0 ? dbPartners : partners;
+
 
   if (loading) {
     return (
