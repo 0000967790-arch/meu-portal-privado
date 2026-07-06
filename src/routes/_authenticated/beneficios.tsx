@@ -329,17 +329,10 @@ function Beneficios() {
                   <img
                     src={p.logo_url}
                     alt=""
-                    className="pointer-events-none absolute -right-6 -bottom-8 h-44 w-44 opacity-[0.08] object-contain grayscale"
+                    className="pointer-events-none absolute -right-4 -bottom-4 h-36 w-36 opacity-[0.18] object-contain grayscale contrast-125"
                   />
                 )}
-                <div className="relative flex items-start justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
-                    {p.logo_url ? (
-                      <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
-                    ) : (
-                      <Icon className="h-6 w-6 text-primary-foreground" />
-                    )}
-                  </div>
+                <div className="relative flex items-start justify-end">
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
                 <h3 className="mt-5 text-lg font-semibold">{p.name}</h3>

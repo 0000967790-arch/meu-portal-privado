@@ -144,14 +144,14 @@ function Index() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
               {dbPartners.length > 0
                 ? dbPartners.map((p) => (
-                    <div key={p.id} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-full" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
-                        {p.logo_url ? (
-                          <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
-                        ) : (
-                          <Store className="h-7 w-7 text-primary-foreground" />
-                        )}
-                      </div>
+                    <div key={p.id} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
+                      {p.logo_url && (
+                        <img
+                          src={p.logo_url}
+                          alt=""
+                          className="pointer-events-none absolute -right-4 -bottom-4 h-24 w-24 opacity-[0.18] object-contain grayscale contrast-125"
+                        />
+                      )}
                       {p.category && (
                         <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                           {p.category}
@@ -162,10 +162,7 @@ function Index() {
                     </div>
                   ))
                 : fallbackPartners.map(({ icon: Icon, name, desc, tag }) => (
-                    <div key={name} className="group relative rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
-                        <Icon className="h-7 w-7 text-primary-foreground" />
-                      </div>
+                    <div key={name} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
                       <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                         {tag}
                       </span>
