@@ -323,9 +323,16 @@ function Beneficios() {
                 key={p.name}
                 type="button"
                 onClick={() => setSelected(p)}
-                className="group text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="group relative overflow-hidden text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <div className="flex items-start justify-between">
+                {p.logo_url && (
+                  <img
+                    src={p.logo_url}
+                    alt=""
+                    className="pointer-events-none absolute -right-6 -bottom-8 h-44 w-44 opacity-[0.08] object-contain grayscale"
+                  />
+                )}
+                <div className="relative flex items-start justify-between">
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: p.logo_url ? undefined : "var(--gradient-primary)" }}>
                     {p.logo_url ? (
                       <img src={p.logo_url} alt={p.name} className="h-full w-full object-cover" />
