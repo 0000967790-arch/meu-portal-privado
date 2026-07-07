@@ -144,21 +144,22 @@ function Index() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
               {dbPartners.length > 0
                 ? dbPartners.map((p) => (
-                    <div key={p.id} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
+                    <div key={p.id} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center min-h-[220px] transition-all hover:shadow-[var(--shadow-elegant)]">
                       {p.logo_url && (
                         <img
                           src={p.logo_url}
                           alt=""
-                          className="pointer-events-none absolute inset-0 h-full w-full object-contain p-4"
+                          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
                         />
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
                       {p.category && (
-                        <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                        <span className="absolute right-4 top-4 z-10 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
                           {p.category}
                         </span>
                       )}
-                      <h4 className="mt-5 text-lg font-semibold">{p.name}</h4>
-                      {p.description && <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>}
+                      <h4 className="relative z-10 mt-24 text-lg font-semibold text-white">{p.name}</h4>
+                      {p.description && <p className="relative z-10 mt-2 text-sm text-white/80">{p.description}</p>}
                     </div>
                   ))
                 : fallbackPartners.map(({ icon: Icon, name, desc, tag }) => (
