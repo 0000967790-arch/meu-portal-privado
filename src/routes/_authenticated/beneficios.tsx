@@ -326,28 +326,19 @@ function Beneficios() {
                 className="group relative overflow-hidden text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {p.logo_url && (
-                  <>
-                    <img
-                      src={p.logo_url}
-                      alt=""
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 h-full w-full object-cover scale-150 blur-2xl"
-                    />
-                    <img
-                      src={p.logo_url}
-                      alt=""
-                      className="pointer-events-none absolute inset-0 h-full w-full object-contain p-6"
-                    />
-                  </>
+                  <img
+                    src={p.logo_url}
+                    alt=""
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                  />
                 )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
                 <div className="relative z-10 flex items-start justify-end">
-                  <span className="rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">{p.tag}</span>
+                  <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
-                <div className="relative z-10 mt-24 rounded-lg bg-black/60 p-3 backdrop-blur">
-                  <h3 className="text-lg font-semibold text-white">{p.name}</h3>
-                  <p className="mt-1 text-sm text-white/80">{p.desc}</p>
-                  <p className="mt-2 text-xs font-medium text-white group-hover:underline">Ver detalhes →</p>
-                </div>
+                <h3 className="relative z-10 mt-20 text-lg font-semibold text-white">{p.name}</h3>
+                <p className="relative z-10 mt-1 text-sm text-white/80">{p.desc}</p>
+                <p className="relative z-10 mt-4 text-xs font-medium text-white group-hover:underline">Ver detalhes →</p>
               </button>
             );
           })}
