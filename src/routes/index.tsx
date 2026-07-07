@@ -149,7 +149,7 @@ function Index() {
                         <img
                           src={p.logo_url}
                           alt=""
-                          className="pointer-events-none absolute -right-4 -bottom-4 h-24 w-24 opacity-[0.18] object-contain grayscale contrast-125"
+                          className="pointer-events-none absolute inset-0 h-full w-full object-contain p-4"
                         />
                       )}
                       {p.category && (

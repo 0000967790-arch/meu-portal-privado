@@ -329,7 +329,7 @@ function Beneficios() {
                   <img
                     src={p.logo_url}
                     alt=""
-                    className="pointer-events-none absolute -right-4 -bottom-4 h-36 w-36 opacity-[0.18] object-contain grayscale contrast-125"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-contain p-6"
                   />
                 )}
                 <div className="relative flex items-start justify-end">
