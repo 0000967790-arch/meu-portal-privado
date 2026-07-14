@@ -266,10 +266,15 @@ function Beneficios() {
           </button>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[90vw] sm:max-w-[760px] aspect-[1.586/1] rounded-3xl p-6 sm:p-10 text-primary-foreground shadow-2xl"
+            className="relative w-full max-w-[90vw] sm:max-w-[760px] aspect-[1.586/1] overflow-hidden rounded-3xl p-6 sm:p-10 text-primary-foreground shadow-2xl"
             style={{ background: "var(--gradient-primary)" }}
           >
-            <div className="flex h-full flex-col justify-between">
+            <img
+              src={logoWatermark}
+              alt=""
+              className="pointer-events-none absolute inset-0 h-full w-full object-contain p-10 sm:p-16 opacity-15"
+            />
+            <div className="relative z-10 flex h-full flex-col justify-between">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-[10px] sm:text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
