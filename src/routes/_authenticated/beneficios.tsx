@@ -210,10 +210,15 @@ function Beneficios() {
             type="button"
             onClick={() => setCardOpen(true)}
             aria-label="Expandir cartão do associado"
-            className="block w-full text-left rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)] transition-all hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="relative block w-full overflow-hidden text-left rounded-2xl p-6 text-primary-foreground shadow-[var(--shadow-elegant)] transition-all hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             style={{ background: "var(--gradient-primary)" }}
           >
-            <div className="flex items-start justify-between">
+            <img
+              src={logoWatermark}
+              alt=""
+              className="pointer-events-none absolute inset-0 h-full w-full object-contain p-8 opacity-15"
+            />
+            <div className="relative z-10 flex items-start justify-between">
               <div>
                 <p className="text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
                 <p className="mt-1 font-display text-2xl font-bold">Top Truck Club</p>
