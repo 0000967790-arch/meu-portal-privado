@@ -17,11 +17,11 @@ type DbPartner = {
 };
 
 const fallbackPartners = [
-  { icon: Store, name: "Armazém Multimarcas", desc: "Descontos exclusivos em autopeças e acessórios multimarcas.", tag: "Peças" },
-  { icon: CircleDot, name: "Grid Pneus", desc: "Condições especiais na compra de pneus e serviços de rodagem.", tag: "Pneus" },
-  { icon: DoorOpen, name: "Fraga Autoportas", desc: "Benefícios em serviços de autoportas e reparos automotivos.", tag: "Reparos" },
-  { icon: Droplets, name: "Fraga Lava Rápido", desc: "Preços reduzidos em lavagem e higienização do veículo.", tag: "Estética" },
-  { icon: Sparkles, name: "GM Estética Automotiva", desc: "Vantagens em polimento, vitrificação e cuidados com a pintura.", tag: "Estética" },
+  { icon: Store, name: "Armazém Multimarcas", tag: "Peças" },
+  { icon: CircleDot, name: "Grid Pneus", tag: "Pneus" },
+  { icon: DoorOpen, name: "Fraga Autoportas", tag: "Reparos" },
+  { icon: Droplets, name: "Fraga Lava Rápido", tag: "Estética" },
+  { icon: Sparkles, name: "GM Estética Automotiva", tag: "Estética" },
 ];
 
 export const Route = createFileRoute("/")({
@@ -159,16 +159,14 @@ function Index() {
                         </span>
                       )}
                       <h4 className="relative z-10 mt-24 text-lg font-semibold text-white">{p.name}</h4>
-                      {p.description && <p className="relative z-10 mt-2 text-sm text-white/80">{p.description}</p>}
                     </div>
                   ))
-                : fallbackPartners.map(({ icon: Icon, name, desc, tag }) => (
+                : fallbackPartners.map(({ icon: Icon, name, tag }) => (
                     <div key={name} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
                       <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                         {tag}
                       </span>
                       <h4 className="mt-5 text-lg font-semibold">{name}</h4>
-                      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
                     </div>
                   ))}
             </div>
