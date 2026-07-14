@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Store, CircleDot, DoorOpen, Droplets, Sparkles, Loader2, Phone, MapPin, Clock, CheckCircle2, ExternalLink, X } from "lucide-react";
+import logoWatermark from "@/assets/toptruck-logo.png";
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
   head: () => ({
