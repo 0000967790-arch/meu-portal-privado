@@ -218,31 +218,33 @@ function Beneficios() {
               alt=""
               className="pointer-events-none absolute inset-0 h-full w-full object-contain p-8 opacity-15"
             />
-            <div className="relative z-10 flex items-start justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
-                <p className="mt-1 font-display text-2xl font-bold">Top Truck Club</p>
+            <div className="relative z-10">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-widest opacity-70">Cartão do Associado</p>
+                  <p className="mt-1 font-display text-2xl font-bold">Top Truck Club</p>
+                </div>
+                <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
+                  Ativo
+                </span>
               </div>
-              <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
-                Ativo
-              </span>
-            </div>
-            <p className="mt-8 font-mono text-xl tracking-widest">{associate.card_number}</p>
-            <div className="mt-6 grid grid-cols-2 gap-4 text-xs uppercase tracking-widest opacity-90">
-              <div className="col-span-2">
-                <p className="opacity-70">Nome</p>
-                <p className="mt-1 font-semibold normal-case tracking-normal">{associate.full_name}</p>
-              </div>
-              <div>
-                <p className="opacity-70">CPF</p>
-                <p className="mt-1 font-mono font-semibold normal-case tracking-wider">{formatCpf(associate.cpf)}</p>
-              </div>
-              <div>
-                <p className="opacity-70">Placa</p>
-                <p className="mt-1 font-mono font-semibold tracking-widest">{formatPlaca(associate.placa)}</p>
-              </div>
-              <div className="col-span-2 mt-1 text-[10px] opacity-60">
-                Toque para expandir
+              <p className="mt-8 font-mono text-xl tracking-widest">{associate.card_number}</p>
+              <div className="mt-6 grid grid-cols-2 gap-4 text-xs uppercase tracking-widest opacity-90">
+                <div className="col-span-2">
+                  <p className="opacity-70">Nome</p>
+                  <p className="mt-1 font-semibold normal-case tracking-normal">{associate.full_name}</p>
+                </div>
+                <div>
+                  <p className="opacity-70">CPF</p>
+                  <p className="mt-1 font-mono font-semibold normal-case tracking-wider">{formatCpf(associate.cpf)}</p>
+                </div>
+                <div>
+                  <p className="opacity-70">Placa</p>
+                  <p className="mt-1 font-mono font-semibold tracking-widest">{formatPlaca(associate.placa)}</p>
+                </div>
+                <div className="col-span-2 mt-1 text-[10px] opacity-60">
+                  Toque para expandir
+                </div>
               </div>
             </div>
           </button>
