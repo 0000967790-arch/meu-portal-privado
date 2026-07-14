@@ -161,7 +161,7 @@ function Index() {
                       <h4 className="relative z-10 mt-24 text-lg font-semibold text-white">{p.name}</h4>
                     </div>
                   ))
-                : fallbackPartners.map(({ icon: Icon, name, desc, tag }) => (
+                : fallbackPartners.map(({ icon: Icon, name, tag }) => (
                     <div key={name} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
                       <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                         {tag}
