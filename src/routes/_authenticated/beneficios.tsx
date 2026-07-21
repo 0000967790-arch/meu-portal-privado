@@ -22,10 +22,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-function whatsappLink(phone: string) {
+function whatsappLink(phone: string, partnerName: string) {
   const digits = phone.replace(/\D/g, "");
   const withCountry = digits.startsWith("55") ? digits : `55${digits}`;
-  return `https://wa.me/${withCountry}`;
+  const text = `Olá! Sou associado(a) da Top Truck e gostaria de saber mais sobre os serviços de ${partnerName}.`;
+  return `https://wa.me/${withCountry}?text=${encodeURIComponent(text)}`;
 }
 
 export const Route = createFileRoute("/_authenticated/beneficios")({
@@ -445,7 +446,7 @@ function Beneficios() {
 
                 {selected.phone && (
                   <a
-                    href={whatsappLink(selected.phone)}
+                    href={whatsappLink(selected.phone, selected.name)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
