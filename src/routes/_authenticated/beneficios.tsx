@@ -367,18 +367,6 @@ function Beneficios() {
                 <p className="relative z-10 mt-1 text-sm text-white/80">{p.desc}</p>
                 <div className="relative z-10 mt-4 flex items-center justify-between">
                   <p className="text-xs font-medium text-white group-hover:underline">Ver detalhes →</p>
-                  {p.phone && (
-                    <a
-                      href={whatsappLink(p.phone)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="rounded-full bg-[#25D366] p-2 text-white shadow-lg transition hover:scale-110 hover:bg-[#1ebd5a]"
-                      aria-label={`Falar com ${p.name} no WhatsApp`}
-                    >
-                      <WhatsAppIcon className="h-4 w-4" />
-                    </a>
-                  )}
                 </div>
               </button>
             );
