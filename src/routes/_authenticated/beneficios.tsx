@@ -454,6 +454,18 @@ function Beneficios() {
                   <ExternalLink className="h-4 w-4" />
                   Ver no Google Maps
                 </a>
+
+                {selected.phone && (
+                  <a
+                    href={whatsappLink(selected.phone)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    Falar no WhatsApp
+                  </a>
+                )}
               </div>
             </>
           )}
