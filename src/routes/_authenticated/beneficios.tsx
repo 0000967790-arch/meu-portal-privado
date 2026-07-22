@@ -364,8 +364,7 @@ function Beneficios() {
                 <div className="relative z-10 flex items-start justify-end">
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
-                <h3 className="relative z-10 mt-20 text-lg font-semibold text-white">{p.name}</h3>
-                <p className="relative z-10 mt-1 text-sm text-white/80">{p.desc}</p>
+                <div className="relative z-10 mt-20" />
                 <div className="relative z-10 mt-4 flex items-center justify-between">
                   <p className="text-xs font-medium text-white group-hover:underline">Ver detalhes →</p>
                 </div>
