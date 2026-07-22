@@ -149,12 +149,11 @@ function Index() {
                         <img
                           src={p.logo_url}
                           alt=""
-                          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                          className="pointer-events-none absolute inset-0 h-full w-full object-contain p-6"
                         />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
                       {p.category && (
-                        <span className="absolute right-4 top-4 z-10 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
+                        <span className="absolute right-4 top-4 z-10 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                           {p.category}
                         </span>
                       )}

@@ -357,10 +357,10 @@ function Beneficios() {
                   <img
                     src={p.logo_url}
                     alt=""
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-contain p-6"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="relative z-10 flex items-start justify-end">
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
@@ -380,9 +380,9 @@ function Beneficios() {
             <>
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-muted" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
                     {selected.logo_url ? (
-                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" />
+                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-contain p-1" />
                     ) : (
                       (() => {
                         const Icon = selected.icon ?? Store;
