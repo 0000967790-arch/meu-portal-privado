@@ -153,7 +153,7 @@ function Index() {
                         />
                       )}
                       {p.category && (
-                        <span className="absolute right-4 top-4 z-10 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
+                        <span className="absolute right-4 top-4 z-10 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
                           {p.category}
                         </span>
                       )}
