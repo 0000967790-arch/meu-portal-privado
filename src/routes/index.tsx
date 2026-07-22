@@ -158,7 +158,7 @@ function Index() {
                           {p.category}
                         </span>
                       )}
-                      <h4 className="relative z-10 mt-24 text-lg font-semibold text-white">{p.name}</h4>
+                      
                     </div>
                   ))
                 : fallbackPartners.map(({ icon: Icon, name, tag }) => (
