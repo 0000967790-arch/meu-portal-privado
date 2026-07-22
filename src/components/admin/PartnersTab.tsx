@@ -7,6 +7,7 @@ import {
   deletePartner,
 } from "@/lib/partners.functions";
 import { uploadImageAndGetUrl } from "@/lib/upload";
+import { trimLogoToSquarePng } from "@/lib/image-trim";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -118,7 +119,8 @@ export function PartnersTab() {
   const onNewLogoPick = async (file: File) => {
     setUploadingNew(true);
     try {
-      const url = await uploadImageAndGetUrl("partner-logos", file);
+      const trimmed = await trimLogoToSquarePng(file);
+      const url = await uploadImageAndGetUrl("partner-logos", trimmed);
       setDraft((d) => ({ ...d, logo_url: url }));
       toast.success("Logo carregada");
     } catch (err) {
@@ -267,7 +269,8 @@ function PartnerRow({
   const onLogoPick = async (file: File) => {
     setUploading(true);
     try {
-      const url = await uploadImageAndGetUrl("partner-logos", file);
+      const trimmed = await trimLogoToSquarePng(file);
+      const url = await uploadImageAndGetUrl("partner-logos", trimmed);
       setDraft((d) => ({ ...d, logo_url: url }));
       toast.success("Logo atualizada — clique em Salvar para confirmar");
     } catch (err) { toast.error(err instanceof Error ? err.message : "Erro ao enviar"); }
