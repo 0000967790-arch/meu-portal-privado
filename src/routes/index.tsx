@@ -144,29 +144,31 @@ function Index() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
               {dbPartners.length > 0
                 ? dbPartners.map((p) => (
-                    <div key={p.id} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center min-h-[220px] transition-all hover:shadow-[var(--shadow-elegant)]">
-                      {p.logo_url && (
-                        <img
-                          src={p.logo_url}
-                          alt=""
-                          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
-                      {p.category && (
-                        <span className="absolute right-4 top-4 z-10 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
-                          {p.category}
-                        </span>
-                      )}
-                      
+                    <div key={p.id} className="group relative overflow-hidden rounded-2xl border bg-card transition-all hover:shadow-[var(--shadow-elegant)]">
+                      <div className="relative flex aspect-square w-full items-center justify-center bg-white p-6">
+                        {p.logo_url && (
+                          <img
+                            src={p.logo_url}
+                            alt={p.name}
+                            className="pointer-events-none max-h-full max-w-full object-contain"
+                          />
+                        )}
+                        {p.category && (
+                          <span className="absolute right-3 top-3 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                            {p.category}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))
                 : fallbackPartners.map(({ icon: Icon, name, tag }) => (
-                    <div key={name} className="group relative overflow-hidden rounded-2xl border bg-card p-6 text-center transition-all hover:shadow-[var(--shadow-elegant)]">
-                      <span className="absolute right-4 top-4 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
-                        {tag}
-                      </span>
-                      <h4 className="mt-5 text-lg font-semibold">{name}</h4>
+                    <div key={name} className="group relative overflow-hidden rounded-2xl border bg-card transition-all hover:shadow-[var(--shadow-elegant)]">
+                      <div className="relative flex aspect-square w-full items-center justify-center bg-white p-6">
+                        <Icon className="h-16 w-16 text-muted-foreground" />
+                        <span className="absolute right-3 top-3 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+                          {tag}
+                        </span>
+                      </div>
                     </div>
                   ))}
             </div>
