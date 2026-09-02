@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet } from "lucide-react";
+import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet, Pencil } from "lucide-react";
 import * as XLSX from "xlsx";
 import mammoth from "mammoth";
 
@@ -230,9 +230,10 @@ export function AssociatesTab() {
             onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 14))} required />
         </div>
         <div>
-          <Label htmlFor="placa">Placa (senha)</Label>
-          <Input id="placa" placeholder="Ex: ABC1D23" value={placa}
-            onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7))} maxLength={7} required />
+          <Label htmlFor="placa">Placas (senha) — separe por vírgula</Label>
+          <Input id="placa" placeholder="Ex: ABC1D23, XYZ4E56" value={placa}
+            onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9,\s]/g, ""))} maxLength={200} required />
+          <p className="mt-1 text-xs text-muted-foreground">Um mesmo CPF/CNPJ pode ter várias placas; qualquer uma serve para entrar.</p>
         </div>
         <div className="sm:col-span-2">
           <Label htmlFor="phone">Telefone</Label>
@@ -261,11 +262,20 @@ export function AssociatesTab() {
                 <p className="text-xs text-muted-foreground">
                   {a.card_number} · {a.email} {a.phone ? `· ${a.phone}` : ""}
                 </p>
+                <p className="mt-1 text-xs">
+                  Placas:{" "}
+                  <span className="font-medium">
+                    {(a.placas && a.placas.length > 0 ? a.placas : a.placa ? [a.placa] : []).join(", ") || "—"}
+                  </span>
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`rounded-full px-2 py-1 text-xs font-medium ${a.active ? "bg-green-100 text-green-700" : "bg-muted text-muted-foreground"}`}>
                   {a.active ? "Ativo" : "Inativo"}
                 </span>
+                <Button variant="outline" size="sm" onClick={() => onEditPlates(a)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => onToggle(a)}>
                   {a.active ? <ShieldOff className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
                 </Button>
