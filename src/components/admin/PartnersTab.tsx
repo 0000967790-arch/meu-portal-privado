@@ -6,7 +6,7 @@ import {
   updatePartner,
   deletePartner,
 } from "@/lib/partners.functions";
-import { uploadImageAndGetUrl } from "@/lib/upload";
+import { uploadImageAndGetUrl, trimLogoFile } from "@/lib/upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
