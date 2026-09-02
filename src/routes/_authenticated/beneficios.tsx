@@ -377,85 +377,94 @@ function Beneficios() {
       </section>
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="relative max-w-lg max-h-[90vh] overflow-y-auto">
           {selected && (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
-                    {selected.logo_url ? (
-                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-contain" />
-                    ) : (
-                      (() => {
-                        const Icon = selected.icon ?? Store;
-                        return <Icon className="h-6 w-6 text-primary-foreground" />;
-                      })()
-                    )}
+              {selected.logo_url && (
+                <img
+                  src={selected.logo_url}
+                  alt=""
+                  className="pointer-events-none absolute inset-0 z-0 h-full w-full object-contain p-12 opacity-[0.08]"
+                />
+              )}
+              <div className="relative z-10">
+                <DialogHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
+                      {selected.logo_url ? (
+                        <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-contain" />
+                      ) : (
+                        (() => {
+                          const Icon = selected.icon ?? Store;
+                          return <Icon className="h-6 w-6 text-primary-foreground" />;
+                        })()
+                      )}
+                    </div>
+                    <div>
+                      <DialogTitle>{selected.name}</DialogTitle>
+                      <DialogDescription>{selected.tag} · Parceiro Top Truck</DialogDescription>
+                    </div>
                   </div>
+                </DialogHeader>
+
+                <div className="space-y-5 pt-2">
+                  <div className="rounded-lg border bg-secondary/40 p-3 text-sm">
+                    <p className="font-semibold text-foreground">Benefício do associado</p>
+                    <p className="mt-1 text-muted-foreground">{selected.benefit}</p>
+                  </div>
+
                   <div>
-                    <DialogTitle>{selected.name}</DialogTitle>
-                    <DialogDescription>{selected.tag} · Parceiro Top Truck</DialogDescription>
+                    <h4 className="text-sm font-semibold">Serviços oferecidos</h4>
+                    <ul className="mt-2 space-y-1.5">
+                      {selected.services.map((s) => (
+                        <li key={s} className="flex items-start gap-2 text-sm text-muted-foreground">
+                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
-              </DialogHeader>
 
-              <div className="space-y-5 pt-2">
-                <div className="rounded-lg border bg-secondary/40 p-3 text-sm">
-                  <p className="font-semibold text-foreground">Benefício do associado</p>
-                  <p className="mt-1 text-muted-foreground">{selected.benefit}</p>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-semibold">Serviços oferecidos</h4>
-                  <ul className="mt-2 space-y-1.5">
-                    {selected.services.map((s) => (
-                      <li key={s} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <span>{s}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-start gap-2">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span className="text-muted-foreground">{selected.address}</span>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      <span className="text-muted-foreground">{selected.address}</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      <a href={`tel:${selected.phone.replace(/\D/g, "")}`} className="text-muted-foreground hover:text-foreground">
+                        {selected.phone}
+                      </a>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      <span className="text-muted-foreground">{selected.hours}</span>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-2">
-                    <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <a href={`tel:${selected.phone.replace(/\D/g, "")}`} className="text-muted-foreground hover:text-foreground">
-                      {selected.phone}
-                    </a>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span className="text-muted-foreground">{selected.hours}</span>
-                  </div>
-                </div>
 
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selected.name} ${selected.address}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-                  style={{ background: "var(--gradient-primary)" }}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Ver no Google Maps
-                </a>
-
-                {selected.phone && (
                   <a
-                    href={whatsappLink(selected.phone, selected.name)}
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selected.name} ${selected.address}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                    style={{ background: "var(--gradient-primary)" }}
                   >
-                    <WhatsAppIcon className="h-4 w-4" />
-                    Falar no WhatsApp
+                    <ExternalLink className="h-4 w-4" />
+                    Ver no Google Maps
                   </a>
-                )}
+
+                  {selected.phone && (
+                    <a
+                      href={whatsappLink(selected.phone, selected.name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1ebd5a]"
+                    >
+                      <WhatsAppIcon className="h-4 w-4" />
+                      Falar no WhatsApp
+                    </a>
+                  )}
+                </div>
               </div>
             </>
           )}
