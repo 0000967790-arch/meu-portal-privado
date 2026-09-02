@@ -7,6 +7,7 @@ import { PhotoMarquee } from "@/components/PhotoMarquee";
 import { listPartners } from "@/lib/partners.functions";
 import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
+import logoWatermark from "@/assets/toptruck-logo.png";
 
 type DbPartner = {
   id: string;
@@ -48,7 +49,13 @@ function Index() {
 
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
-        <div className="container mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:items-center md:py-28">
+        <img
+          src={logoWatermark}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 top-1/2 z-0 w-[700px] -translate-y-1/2 opacity-[0.12] blur-[1px] md:w-[950px]"
+        />
+        <div className="container relative z-10 mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:items-center md:py-28">
           <div className="text-primary-foreground">
             <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
               Associação de Proteção Veicular
