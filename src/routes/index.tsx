@@ -7,6 +7,7 @@ import { PhotoMarquee } from "@/components/PhotoMarquee";
 import { listPartners } from "@/lib/partners.functions";
 import { Shield, HeartHandshake, Wallet, Headphones, ArrowRight, Store, CircleDot, DoorOpen, Droplets, Sparkles } from "lucide-react";
 import hero from "@/assets/hero-truck.jpg";
+import logoWatermark from "@/assets/toptruck-logo.png";
 
 type DbPartner = {
   id: string;
