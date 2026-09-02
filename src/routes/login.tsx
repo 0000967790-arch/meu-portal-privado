@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAssociateByEmail } from "@/lib/associates.functions";
+import { resolveAssociateLogin } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ const cpfToEmail = (cpf: string) => `${cpf}@associado.toptruck.app`;
 
 function LoginPage() {
   const navigate = useNavigate();
-  const checkAssociate = useServerFn(checkAssociateByEmail);
+  const resolveLogin = useServerFn(resolveAssociateLogin);
   const [cpf, setCpf] = useState("");
   const [placa, setPlaca] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,9 +56,9 @@ function LoginPage() {
     const email = cpfToEmail(cleanCpf);
     const password = cleanPlaca;
 
-    // Block anyone who is not a registered associate
+    // Block anyone who is not a registered associate and validate the plate
     try {
-      const check = await checkAssociate({ data: { email } });
+      const check = await resolveLogin({ data: { cpf: cleanCpf, placa: cleanPlaca } });
       if (!check.exists) {
         toast.error("CPF/CNPJ não cadastrado no Clube. Solicite sua cotação pelo WhatsApp.");
         setLoading(false);
@@ -66,6 +66,11 @@ function LoginPage() {
       }
       if (!check.active) {
         toast.error("Sua associação está inativa. Entre em contato com a Top Truck.");
+        setLoading(false);
+        return;
+      }
+      if (!check.plateValid) {
+        toast.error("Placa não vinculada a este CPF/CNPJ. Verifique e tente novamente.");
         setLoading(false);
         return;
       }

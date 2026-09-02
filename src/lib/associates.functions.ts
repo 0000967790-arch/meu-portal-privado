@@ -17,6 +17,51 @@ export const checkAssociateByEmail = createServerFn({ method: "POST" })
     return { exists: !!row, active: row?.active ?? false };
   });
 
+// Public: validate a CPF/CNPJ + placa pair against the associate's registered
+// plates and align the auth password with the plate used to log in.
+export const resolveAssociateLogin = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        cpf: z.string().regex(/^(\d{11}|\d{14})$/),
+        placa: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{7}$/),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const email = cpfToEmail(data.cpf);
+    const { data: row } = await supabaseAdmin
+      .from("associates")
+      .select("id, active, user_id, placa, placas")
+      .ilike("email", email)
+      .maybeSingle();
+    if (!row) return { exists: false, active: false, plateValid: false };
+    if (!row.active) return { exists: true, active: false, plateValid: false };
+
+    const known = new Set<string>([...(row.placas ?? []), row.placa].filter(Boolean) as string[]);
+    if (!known.has(data.placa)) return { exists: true, active: true, plateValid: false };
+
+    // Align the auth user password with the plate being used
+    if (row.user_id) {
+      const { error } = await supabaseAdmin.auth.admin.updateUserById(row.user_id, {
+        password: data.placa,
+      });
+      if (error) throw new Error(error.message);
+    } else {
+      const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password: data.placa,
+        email_confirm: true,
+      });
+      if (error && !/already|registered|exists/i.test(error.message)) throw new Error(error.message);
+      if (created?.user?.id) {
+        await supabaseAdmin.from("associates").update({ user_id: created.user.id }).eq("id", row.id);
+      }
+    }
+    await supabaseAdmin.from("associates").update({ placa: data.placa }).eq("id", row.id);
+    return { exists: true, active: true, plateValid: true };
+  });
+
 // Authenticated: returns the associate record for the current user
 export const getMyAssociate = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -57,38 +102,71 @@ export const listAssociates = createServerFn({ method: "GET" })
 
     const { data, error } = await supabaseAdmin
       .from("associates")
-      .select("id, full_name, email, phone, card_number, active, created_at, user_id")
+      .select("id, full_name, email, phone, card_number, active, created_at, user_id, placa, placas")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return { associates: data ?? [] };
   });
 
+const plateSchema = z.string().trim().toUpperCase().regex(/^[A-Z0-9]{7}$/, "Placa deve ter 7 caracteres");
+
 const createSchema = z.object({
   full_name: z.string().trim().min(2).max(120),
   cpf: z.string().regex(/^(\d{11}|\d{14})$/, "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)"),
   phone: z.string().trim().max(20).optional().or(z.literal("")),
-  placa: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{7}$/, "Placa deve ter 7 caracteres"),
+  placa: plateSchema.optional(),
+  placas: z.array(plateSchema).min(1, "Informe ao menos uma placa").max(50).optional(),
 });
+
+async function assertAdmin(context: { supabase: any; userId: string }) {
+  const { data: roleRow } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (!roleRow) throw new Error("Acesso negado");
+}
 
 export const createAssociate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => createSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { data: roleRow } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    if (!roleRow) throw new Error("Acesso negado");
+    await assertAdmin(context);
+
+    const plates = Array.from(
+      new Set([...(data.placas ?? []), ...(data.placa ? [data.placa] : [])]),
+    );
+    if (plates.length === 0) throw new Error("Informe ao menos uma placa");
 
     const email = cpfToEmail(data.cpf);
 
-    // Pre-create the auth user with placa as password so the associate
-    // can log in imediatamente com o CPF e a placa cadastrada pelo admin.
+    // Existing document? just merge the new plates into it
+    const { data: existing } = await supabaseAdmin
+      .from("associates")
+      .select("id, placa, placas")
+      .ilike("email", email)
+      .maybeSingle();
+
+    if (existing) {
+      const merged = Array.from(
+        new Set([...(existing.placas ?? []), ...(existing.placa ? [existing.placa] : []), ...plates]),
+      );
+      const { data: updated, error } = await supabaseAdmin
+        .from("associates")
+        .update({ placas: merged, full_name: data.full_name, phone: data.phone || null })
+        .eq("id", existing.id)
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      return { associate: updated, merged: true };
+    }
+
+    // Pre-create the auth user with the first placa as password so the associate
+    // can log in imediatamente com o CPF/CNPJ e qualquer placa cadastrada.
     const { data: created, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email,
-      password: data.placa,
+      password: plates[0],
       email_confirm: true,
     });
     if (authError && !/already|registered|exists/i.test(authError.message)) {
@@ -102,13 +180,31 @@ export const createAssociate = createServerFn({ method: "POST" })
         email,
         phone: data.phone || null,
         cpf: data.cpf,
-        placa: data.placa,
+        placa: plates[0],
+        placas: plates,
         user_id: created?.user?.id ?? null,
       })
       .select()
       .single();
     if (error) throw new Error(error.message);
-    return { associate: inserted };
+    return { associate: inserted, merged: false };
+  });
+
+// Admin: replace the plate list of an associate
+export const updateAssociatePlates = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ id: z.string().uuid(), placas: z.array(plateSchema).min(1).max(50) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const plates = Array.from(new Set(data.placas));
+    const { error } = await supabaseAdmin
+      .from("associates")
+      .update({ placas: plates, placa: plates[0] })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, placas: plates };
   });
 
 export const setAssociateActive = createServerFn({ method: "POST" })
