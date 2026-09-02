@@ -53,7 +53,7 @@ function Index() {
           src={logoWatermark}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-1/2 z-0 w-[700px] -translate-y-1/2 opacity-[0.12] blur-[1px] md:w-[950px]"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-[700px] -translate-x-1/2 -translate-y-1/2 opacity-[0.12] blur-[1px] md:w-[950px]"
         />
         <div className="container relative z-10 mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:items-center md:py-28">
           <div className="text-primary-foreground">
