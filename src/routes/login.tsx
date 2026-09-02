@@ -22,7 +22,7 @@ export const Route = createFileRoute("/login")({
 });
 
 const schema = z.object({
-  cpf: z.string().regex(/^\d{11}$/, "CPF deve ter 11 dígitos"),
+  cpf: z.string().regex(/^(\d{11}|\d{14})$/, "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)"),
   placa: z.string().regex(/^[A-Z0-9]{7}$/, "Placa deve ter 7 caracteres (letras e números)"),
 });
 
@@ -60,7 +60,7 @@ function LoginPage() {
     try {
       const check = await checkAssociate({ data: { email } });
       if (!check.exists) {
-        toast.error("CPF não cadastrado no Clube. Solicite sua cotação pelo WhatsApp.");
+        toast.error("CPF/CNPJ não cadastrado no Clube. Solicite sua cotação pelo WhatsApp.");
         setLoading(false);
         return;
       }
@@ -121,19 +121,19 @@ function LoginPage() {
         <div className="rounded-2xl border bg-card p-8 shadow-[var(--shadow-elegant)]">
           <h1 className="text-2xl font-bold">Clube de Benefícios</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Entre com seu CPF e a placa do seu veículo cadastrada. Se for seu primeiro acesso, sua conta será criada automaticamente.
+            Entre com seu CPF ou CNPJ e a placa do seu veículo cadastrada. Se for seu primeiro acesso, sua conta será criada automaticamente.
           </p>
 
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="cpf">CPF</Label>
+              <Label htmlFor="cpf">CPF ou CNPJ</Label>
               <Input
                 id="cpf"
                 inputMode="numeric"
                 placeholder="Somente números"
                 maxLength={14}
                 value={cpf}
-                onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 14))}
                 required
               />
             </div>
