@@ -5,6 +5,7 @@ import {
   createAssociate,
   setAssociateActive,
   deleteAssociate,
+  updateAssociatePlates,
 } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,7 +75,20 @@ type Associate = {
   active: boolean;
   created_at: string;
   user_id: string | null;
+  placa: string | null;
+  placas: string[] | null;
 };
+
+function parsePlates(input: string): string[] {
+  return Array.from(
+    new Set(
+      input
+        .toUpperCase()
+        .split(/[^A-Z0-9]+/)
+        .filter((p) => p.length === 7),
+    ),
+  );
+}
 
 export function AssociatesTab() {
   const fetchList = useServerFn(listAssociates);
