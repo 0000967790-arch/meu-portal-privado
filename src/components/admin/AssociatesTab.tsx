@@ -95,6 +95,7 @@ export function AssociatesTab() {
   const createFn = useServerFn(createAssociate);
   const toggleFn = useServerFn(setAssociateActive);
   const deleteFn = useServerFn(deleteAssociate);
+  const updatePlatesFn = useServerFn(updateAssociatePlates);
 
   const [items, setItems] = useState<Associate[]>([]);
   const [loading, setLoading] = useState(false);
@@ -124,20 +125,35 @@ export function AssociatesTab() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCpf = cpf.replace(/\D/g, "");
-    const cleanPlaca = placa.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    const plates = parsePlates(placa);
     if (cleanCpf.length !== 11 && cleanCpf.length !== 14) return toast.error("Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)");
-    if (cleanPlaca.length !== 7) return toast.error("Placa deve ter 7 caracteres");
+    if (plates.length === 0) return toast.error("Informe ao menos uma placa válida (7 caracteres)");
     if (name.trim().length < 2) return toast.error("Informe o nome completo");
     setSubmitting(true);
     try {
-      await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim(), placa: cleanPlaca } });
-      toast.success("Associado cadastrado!");
+      const res = await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim(), placas: plates } });
+      toast.success(res.merged ? "Placa(s) adicionada(s) ao cadastro existente!" : "Associado cadastrado!");
       setName(""); setCpf(""); setPhone(""); setPlaca("");
       refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao cadastrar");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const onEditPlates = async (a: Associate) => {
+    const current = (a.placas && a.placas.length > 0 ? a.placas : a.placa ? [a.placa] : []).join(", ");
+    const input = window.prompt("Placas do associado (separadas por vírgula):", current);
+    if (input === null) return;
+    const plates = parsePlates(input);
+    if (plates.length === 0) return toast.error("Informe ao menos uma placa válida (7 caracteres)");
+    try {
+      await updatePlatesFn({ data: { id: a.id, placas: plates } });
+      toast.success("Placas atualizadas!");
+      refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar placas");
     }
   };
 
