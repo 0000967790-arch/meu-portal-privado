@@ -377,7 +377,7 @@ function Beneficios() {
       </section>
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <DialogContent className="relative max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           {selected && (
             <>
               {selected.logo_url && (
