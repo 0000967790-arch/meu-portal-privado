@@ -33,12 +33,12 @@ function rowsFromRecords(records: Record<string, unknown>[]): ParsedRow[] {
   return records
     .map((r) => {
       const full_name = pickKey(r, ["nome", "name"]).trim();
-      const cpf = pickKey(r, ["cpf"]).replace(/\D/g, "");
+      const cpf = pickKey(r, ["cpf", "cnpj", "cpf/cnpj", "documento"]).replace(/\D/g, "");
       const phone = pickKey(r, ["telefone", "phone", "celular", "fone"]).trim();
       const placa = pickKey(r, ["placa", "plate"]).toUpperCase().replace(/[^A-Z0-9]/g, "");
       return { full_name, cpf, phone, placa };
     })
-    .filter((r) => r.full_name && r.cpf.length === 11 && r.placa.length === 7);
+    .filter((r) => r.full_name && (r.cpf.length === 11 || r.cpf.length === 14) && r.placa.length === 7);
 }
 
 async function parseFile(file: File): Promise<ParsedRow[]> {
@@ -111,7 +111,7 @@ export function AssociatesTab() {
     e.preventDefault();
     const cleanCpf = cpf.replace(/\D/g, "");
     const cleanPlaca = placa.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
-    if (cleanCpf.length !== 11) return toast.error("CPF deve ter 11 dígitos");
+    if (cleanCpf.length !== 11 && cleanCpf.length !== 14) return toast.error("Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)");
     if (cleanPlaca.length !== 7) return toast.error("Placa deve ter 7 caracteres");
     if (name.trim().length < 2) return toast.error("Informe o nome completo");
     setSubmitting(true);
@@ -195,9 +195,9 @@ export function AssociatesTab() {
           <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} required />
         </div>
         <div>
-          <Label htmlFor="cpf">CPF (somente números)</Label>
-          <Input id="cpf" inputMode="numeric" value={cpf}
-            onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 11))} required />
+          <Label htmlFor="cpf">CPF ou CNPJ (somente números)</Label>
+          <Input id="cpf" inputMode="numeric" maxLength={14} value={cpf}
+            onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 14))} required />
         </div>
         <div>
           <Label htmlFor="placa">Placa (senha)</Label>

@@ -65,7 +65,7 @@ export const listAssociates = createServerFn({ method: "GET" })
 
 const createSchema = z.object({
   full_name: z.string().trim().min(2).max(120),
-  cpf: z.string().regex(/^\d{11}$/, "CPF deve ter 11 dígitos"),
+  cpf: z.string().regex(/^(\d{11}|\d{14})$/, "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)"),
   phone: z.string().trim().max(20).optional().or(z.literal("")),
   placa: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{7}$/, "Placa deve ter 7 caracteres"),
 });
