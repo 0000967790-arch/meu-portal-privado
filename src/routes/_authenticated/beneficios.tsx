@@ -384,7 +384,7 @@ function Beneficios() {
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
                     {selected.logo_url ? (
-                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" />
+                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-contain" />
                     ) : (
                       (() => {
                         const Icon = selected.icon ?? Store;
