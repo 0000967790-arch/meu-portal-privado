@@ -1,0 +1,2 @@
+ALTER TABLE public.associates ADD COLUMN IF NOT EXISTS placas text[] NOT NULL DEFAULT '{}'::text[];
+UPDATE public.associates SET placas = ARRAY[placa] WHERE placa IS NOT NULL AND placas = '{}'::text[];

@@ -5,12 +5,13 @@ import {
   createAssociate,
   setAssociateActive,
   deleteAssociate,
+  updateAssociatePlates,
 } from "@/lib/associates.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet } from "lucide-react";
+import { Loader2, Plus, Trash2, ShieldOff, ShieldCheck, Upload, FileSpreadsheet, Pencil } from "lucide-react";
 import * as XLSX from "xlsx";
 import mammoth from "mammoth";
 
@@ -74,13 +75,27 @@ type Associate = {
   active: boolean;
   created_at: string;
   user_id: string | null;
+  placa: string | null;
+  placas: string[] | null;
 };
+
+function parsePlates(input: string): string[] {
+  return Array.from(
+    new Set(
+      input
+        .toUpperCase()
+        .split(/[^A-Z0-9]+/)
+        .filter((p) => p.length === 7),
+    ),
+  );
+}
 
 export function AssociatesTab() {
   const fetchList = useServerFn(listAssociates);
   const createFn = useServerFn(createAssociate);
   const toggleFn = useServerFn(setAssociateActive);
   const deleteFn = useServerFn(deleteAssociate);
+  const updatePlatesFn = useServerFn(updateAssociatePlates);
 
   const [items, setItems] = useState<Associate[]>([]);
   const [loading, setLoading] = useState(false);
@@ -110,20 +125,35 @@ export function AssociatesTab() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCpf = cpf.replace(/\D/g, "");
-    const cleanPlaca = placa.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    const plates = parsePlates(placa);
     if (cleanCpf.length !== 11 && cleanCpf.length !== 14) return toast.error("Informe um CPF (11 dígitos) ou CNPJ (14 dígitos)");
-    if (cleanPlaca.length !== 7) return toast.error("Placa deve ter 7 caracteres");
+    if (plates.length === 0) return toast.error("Informe ao menos uma placa válida (7 caracteres)");
     if (name.trim().length < 2) return toast.error("Informe o nome completo");
     setSubmitting(true);
     try {
-      await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim(), placa: cleanPlaca } });
-      toast.success("Associado cadastrado!");
+      const res = await createFn({ data: { full_name: name.trim(), cpf: cleanCpf, phone: phone.trim(), placas: plates } });
+      toast.success(res.merged ? "Placa(s) adicionada(s) ao cadastro existente!" : "Associado cadastrado!");
       setName(""); setCpf(""); setPhone(""); setPlaca("");
       refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao cadastrar");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const onEditPlates = async (a: Associate) => {
+    const current = (a.placas && a.placas.length > 0 ? a.placas : a.placa ? [a.placa] : []).join(", ");
+    const input = window.prompt("Placas do associado (separadas por vírgula):", current);
+    if (input === null) return;
+    const plates = parsePlates(input);
+    if (plates.length === 0) return toast.error("Informe ao menos uma placa válida (7 caracteres)");
+    try {
+      await updatePlatesFn({ data: { id: a.id, placas: plates } });
+      toast.success("Placas atualizadas!");
+      refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar placas");
     }
   };
 
@@ -200,9 +230,10 @@ export function AssociatesTab() {
             onChange={(e) => setCpf(e.target.value.replace(/\D/g, "").slice(0, 14))} required />
         </div>
         <div>
-          <Label htmlFor="placa">Placa (senha)</Label>
-          <Input id="placa" placeholder="Ex: ABC1D23" value={placa}
-            onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7))} maxLength={7} required />
+          <Label htmlFor="placa">Placas (senha) — separe por vírgula</Label>
+          <Input id="placa" placeholder="Ex: ABC1D23, XYZ4E56" value={placa}
+            onChange={(e) => setPlaca(e.target.value.toUpperCase().replace(/[^A-Z0-9,\s]/g, ""))} maxLength={200} required />
+          <p className="mt-1 text-xs text-muted-foreground">Um mesmo CPF/CNPJ pode ter várias placas; qualquer uma serve para entrar.</p>
         </div>
         <div className="sm:col-span-2">
           <Label htmlFor="phone">Telefone</Label>
@@ -231,11 +262,20 @@ export function AssociatesTab() {
                 <p className="text-xs text-muted-foreground">
                   {a.card_number} · {a.email} {a.phone ? `· ${a.phone}` : ""}
                 </p>
+                <p className="mt-1 text-xs">
+                  Placas:{" "}
+                  <span className="font-medium">
+                    {(a.placas && a.placas.length > 0 ? a.placas : a.placa ? [a.placa] : []).join(", ") || "—"}
+                  </span>
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`rounded-full px-2 py-1 text-xs font-medium ${a.active ? "bg-green-100 text-green-700" : "bg-muted text-muted-foreground"}`}>
                   {a.active ? "Ativo" : "Inativo"}
                 </span>
+                <Button variant="outline" size="sm" onClick={() => onEditPlates(a)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => onToggle(a)}>
                   {a.active ? <ShieldOff className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
                 </Button>
