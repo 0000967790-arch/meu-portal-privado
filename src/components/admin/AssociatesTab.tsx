@@ -33,12 +33,12 @@ function rowsFromRecords(records: Record<string, unknown>[]): ParsedRow[] {
   return records
     .map((r) => {
       const full_name = pickKey(r, ["nome", "name"]).trim();
-      const cpf = pickKey(r, ["cpf"]).replace(/\D/g, "");
+      const cpf = pickKey(r, ["cpf", "cnpj", "cpf/cnpj", "documento"]).replace(/\D/g, "");
       const phone = pickKey(r, ["telefone", "phone", "celular", "fone"]).trim();
       const placa = pickKey(r, ["placa", "plate"]).toUpperCase().replace(/[^A-Z0-9]/g, "");
       return { full_name, cpf, phone, placa };
     })
-    .filter((r) => r.full_name && r.cpf.length === 11 && r.placa.length === 7);
+    .filter((r) => r.full_name && (r.cpf.length === 11 || r.cpf.length === 14) && r.placa.length === 7);
 }
 
 async function parseFile(file: File): Promise<ParsedRow[]> {
