@@ -351,22 +351,24 @@ function Beneficios() {
                 key={p.name}
                 type="button"
                 onClick={() => setSelected(p)}
-                className="group relative overflow-hidden text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="group relative flex flex-col overflow-hidden text-left rounded-2xl border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                {p.logo_url && (
-                  <img
-                    src={p.logo_url}
-                    alt=""
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
-                <div className="relative z-10 flex items-start justify-end">
+                <div className="flex items-start justify-end">
                   <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">{p.tag}</span>
                 </div>
-                <div className="relative z-10 mt-20" />
-                <div className="relative z-10 mt-4 flex items-center justify-between">
-                  <p className="text-xs font-medium text-white group-hover:underline">Ver detalhes →</p>
+                <div className="flex flex-1 items-center justify-center py-6 min-h-[140px]">
+                  {p.logo_url ? (
+                    <img
+                      src={p.logo_url}
+                      alt={p.name}
+                      className="pointer-events-none max-h-[140px] max-w-full object-contain"
+                    />
+                  ) : (
+                    <Icon className="h-12 w-12 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-foreground group-hover:underline">Ver detalhes →</p>
                 </div>
               </button>
             );
@@ -382,7 +384,7 @@ function Beneficios() {
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl" style={{ background: selected.logo_url ? undefined : "var(--gradient-primary)" }}>
                     {selected.logo_url ? (
-                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" />
+                      <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-contain" />
                     ) : (
                       (() => {
                         const Icon = selected.icon ?? Store;

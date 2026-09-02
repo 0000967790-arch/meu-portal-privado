@@ -6,7 +6,7 @@ import {
   updatePartner,
   deletePartner,
 } from "@/lib/partners.functions";
-import { uploadImageAndGetUrl } from "@/lib/upload";
+import { uploadImageAndGetUrl, trimLogoFile } from "@/lib/upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -118,7 +118,8 @@ export function PartnersTab() {
   const onNewLogoPick = async (file: File) => {
     setUploadingNew(true);
     try {
-      const url = await uploadImageAndGetUrl("partner-logos", file);
+      const trimmed = await trimLogoFile(file);
+      const url = await uploadImageAndGetUrl("partner-logos", trimmed);
       setDraft((d) => ({ ...d, logo_url: url }));
       toast.success("Logo carregada");
     } catch (err) {
@@ -140,7 +141,7 @@ export function PartnersTab() {
           <div className="flex flex-col items-center gap-2">
             <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border bg-muted">
               {draft.logo_url ? (
-                <img src={draft.logo_url} alt="Prévia da logo" className="h-full w-full object-cover" />
+                <img src={draft.logo_url} alt="Prévia da logo" className="h-full w-full object-contain" />
               ) : (
                 <Store className="h-8 w-8 text-muted-foreground" />
               )}
@@ -267,7 +268,8 @@ function PartnerRow({
   const onLogoPick = async (file: File) => {
     setUploading(true);
     try {
-      const url = await uploadImageAndGetUrl("partner-logos", file);
+      const trimmed = await trimLogoFile(file);
+      const url = await uploadImageAndGetUrl("partner-logos", trimmed);
       setDraft((d) => ({ ...d, logo_url: url }));
       toast.success("Logo atualizada — clique em Salvar para confirmar");
     } catch (err) { toast.error(err instanceof Error ? err.message : "Erro ao enviar"); }
@@ -278,7 +280,7 @@ function PartnerRow({
     <div className="p-4">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border bg-muted">
-          {partner.logo_url ? <img src={partner.logo_url} alt="" className="h-full w-full object-cover" /> : <Store className="h-5 w-5 text-muted-foreground" />}
+          {partner.logo_url ? <img src={partner.logo_url} alt="" className="h-full w-full object-contain" /> : <Store className="h-5 w-5 text-muted-foreground" />}
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{partner.name}</p>
@@ -299,7 +301,7 @@ function PartnerRow({
         <div className="mt-4 grid gap-4 rounded-xl border bg-muted/30 p-4 sm:grid-cols-2">
           <div className="sm:col-span-2 flex items-center gap-3">
             <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border bg-background">
-              {draft.logo_url ? <img src={draft.logo_url} alt="" className="h-full w-full object-cover" /> : <Store className="h-6 w-6 text-muted-foreground" />}
+              {draft.logo_url ? <img src={draft.logo_url} alt="" className="h-full w-full object-contain" /> : <Store className="h-6 w-6 text-muted-foreground" />}
             </div>
             <input ref={fileRef} type="file" accept="image/*" className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) onLogoPick(f); }} />
